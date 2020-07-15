@@ -3,10 +3,8 @@
 	include('../config/database.php');
 	include('isCli.php');
 
-
-	
 	if (isCli())
-{
+    {
 		echo 'Add user' . PHP_EOL . 'Insert username:' . PHP_EOL ;
 		$username = trim(fgets(STDIN));
 		echo 'Set email for user ' . $username . PHP_EOL ;
@@ -14,11 +12,10 @@
 		echo 'Set password for user ' .  $username . PHP_EOL ;
 		$password = trim(fgets(STDIN));
 		echo 'Adding user ' . $username . ' with email ' . $email . PHP_EOL
-	.  'Are you sure? (y/n)' . PHP_EOL;
-		$ok = trim(fgets(STDIN));
-		if ($ok != "y")
+	    .  'Are you sure? (y/n)' . PHP_EOL;
+		if (trim(fgets(STDIN ))!= "y")
 			exit(1);
-}
+    }
 	else
 	{
 		$username = $_POST['login'];
@@ -27,7 +24,7 @@
 	}
 	$pdo = db_connect();
 	$stmt = $pdo->prepare("SELECT username FROM users WHERE username LIKE ?;");
-	$stmt->execute(array($username));
+	$stmt->execute([$username]);
 	if ($stmt->fetch())
 	{
 		echo "Username exists" . PHP_EOL;
