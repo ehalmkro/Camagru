@@ -1,13 +1,13 @@
-<?
+<?PHP
 	include('database.php');
 
 	try{	
 	$pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-	$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }	catch (PDOException $e) {
-	echo 'Connection failed: ' . $e->getMessage();
+	echo 'Connection failed: ' . $e->getMessage() . PHP_EOL;
 	exit(1);
-}	
+}
 
 	$sql = 'CREATE DATABASE IF NOT EXISTS camagru_db; USE camagru_db;';
 	$pdo->exec($sql);
