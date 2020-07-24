@@ -2,7 +2,8 @@
 
 require_once "../config/database.php";
 
-Config::write('db.dsn', $DB_DSN . ";dbname=camagru_db");
+Config::write('db.dsn', $DB_DSN );
+//. ";dbname=camagru_db"
 Config::write('db.user', $DB_USER);
 Config::write('db.password', $DB_PASSWORD);
 
@@ -29,9 +30,15 @@ class Core
 
     private function __construct()
     {
-        $this->pdo = new PDO(Config::read('db.dsn'), Config::read('db.user'),
-            Config::read('db.password'));
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $this->pdo = new PDO(Config::read('db.dsn'), Config::read('db.user'),
+                Config::read('db.password'));
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage();
+            die();
+        }
+
     }
 
     public static function getInstance()
