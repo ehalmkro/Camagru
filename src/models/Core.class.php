@@ -1,6 +1,6 @@
 <?php
 
-require_once "../config/database.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/config/database.php";
 
 Config::write('db.dsn', $DB_DSN );
 //. ";dbname=camagru_db"

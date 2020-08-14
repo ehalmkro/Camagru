@@ -1,5 +1,5 @@
 <?php
-require_once 'Core.class.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/Core.class.php';
 
 class DefaultTable
 {
@@ -20,6 +20,7 @@ class DefaultTable
         $this->rowsPerPage = 10;
         $this->fieldList = array('column1', 'column2', 'column3');
         $this->fieldList['column1'] = array('pkey' => 'y');
+        $this->pkey = 'pkey';
     }
 
     public function getData($where)
@@ -31,22 +32,22 @@ class DefaultTable
         $this->lastPage = 0;
 
         if (empty($where)) {
-            $where_str = NULL;
+            $query = "SELECT COUNT(*) FROM $this->tableName";
         } else {
-            $where_str = "WHERE $where";
+            $query = "SELECT COUNT(*) FROM $this->tableName WHERE $this->pkey = ?";
         }
-
-        $query = "SELECT COUNT(*) FROM $this->tableName $where_str";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
+        if (empty($where))
+            $stmt->execute();
+        else
+            $stmt->execute(array($where));
         $queryData = $stmt->fetch();
         $this->numRows = $queryData[0];
-
 
         // PAGINATION:
         if ($this->numRows <= 0) {
             $this->pageNb = 0;
-            return;
+            return NULL;
         }
         if ($rowsPerPage > 0) {
             $this->lastPage = ceil($this->numRows / $rowsPerPage);
@@ -63,10 +64,14 @@ class DefaultTable
         } else
             $limit_str = NULL;
 
-        $query = "SELECT * FROM $this->tableName $where_str $limit_str";
+        if (empty($where)) {
+            $query = "SELECT * FROM $this->tableName $limit_str";
+        } else {
+            $query = "SELECT * FROM $this->tableName WHERE $this->pkey = ? $limit_str";
+        }
         try {
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute();
+            $stmt->execute(array($where));
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage();
             $this->errors[] = $e->getMessage();
@@ -77,7 +82,7 @@ class DefaultTable
         return $this->dataArray;
     }
 
-    public function insertRecord($fieldArray)
+   /* public function insertRecord($fieldArray)
     {
         $fieldList = $this->fieldList;
         foreach ($fieldArray as $field => $value) {
@@ -98,10 +103,10 @@ class DefaultTable
             return FALSE;
         }
         return TRUE;
-    }
+    }*/
 
 
-    public function updateRecord($fieldArray)
+   /* public function updateRecord($fieldArray)
     {
         $fieldList = $this->fieldList;
         foreach ($fieldArray as $field => $fieldValue) {
@@ -130,23 +135,25 @@ class DefaultTable
         }
         return TRUE;
 
-    }
+    }*/
 
-    public function deleteRecord($fieldArray)
+    public function deleteRecord($pkey)
     {
-        $fieldList = $this->fieldList;
-        $where = NULL;
-        foreach ($fieldArray as $item => $value) {
-            if (isset($fieldList[$item]['pkey'])) {
-                $where .= "$item='$value' AND ";
-            }
-        }
-        $where = rtrim($where, ' AND ');
-        $query = "DELETE FROM $this->tableName WHERE $where";
+        /*
+             $fieldList = $this->fieldList;
+             $where = NULL;
+            foreach ($fieldArray as $item => $value) {
+                 if (isset($fieldList[$item]['pkey'])) {
+                     $where .= "$item='$value' AND ";
+                 }
+             }
+        $where = rtrim($where, ' AND ');*/
+
+        $query = "DELETE FROM $this->tableName WHERE $this->pkey = ?";
 
         try {
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute();
+            $stmt->execute($pkey);
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage();
             $this->errors[] = $e->getMessage();
