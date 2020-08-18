@@ -11,32 +11,25 @@ class imageController
         $this->model = new imageModel();
     }
 
-    public function handleRequest()
-    {
-        $op = trim($_SERVER['PATH_INFO'], '/');
-        switch ($op) {
-            case 'uploadImage':
-                $this->uploadImage();
-        }
-
-    }
-
     public function uploadImage()
     {
-        if ($this->checkUid() == FALSE || !$_POST['file'])
-            return FALSE;
-        $file = $_POST['file'];
-        $file = base64_decode((str_replace(' ','+',$file)));
-        if (!$this->model->addImage($_POST['uid'], $file))
-            $response = [
-            "status" => "success",
-            "error" => false,
-            "message" => "Image upload succeeded"];
-        else
-            $response = [
+        if (($uid = $this->checkUid()) == FALSE || !$_POST['file'])
+            return json_encode([
                 "status" => "fail",
                 "error" => true,
-                "message" => "Image upload FAILED"];
+                "message" => "No image"]);
+        $file = $_POST['file'];
+        $file = base64_decode((str_replace(' ','+',$file)));
+        if ($this->model->addImage($uid, $file))
+            $response = array(
+            "status" => "success",
+            "error" => false,
+            "message" => "Image upload succeeded");
+        else
+            $response = array(
+                "status" => "fail",
+                "error" => true,
+                "message" => "Image upload FAILED");
         echo json_encode($response);
 
     }
