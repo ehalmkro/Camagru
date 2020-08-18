@@ -23,9 +23,3 @@
 <script src="../../public/js/webcam.js"></script>
 </body>
 </html>
-
-<?php
-    include_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/imageController.php';
-
-    $imgController = new imageController();
-    $imgController->handleRequest();

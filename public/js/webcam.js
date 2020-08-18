@@ -32,13 +32,17 @@ const upload = (file) => {
     let data = new FormData();
     data.append('file', file);
     data.append('user', 'test');
-    data.append('operation', 'addImage');
-    fetch('../../src/controllers/uploadFile.php/lol', {
+    fetch('../../index.php/imageController/uploadImage', {
         method: "POST",
         mode: "same-origin",
         credentials: "same-origin",
         body: data
     })
+
+        /* PLAINTEXT CONSOLE LOG FOR DEBUGGING
+                .then(res => res.text())          // convert to plain text
+                .then(text => console.log(text))  // then log it out */
+
         .then(response => response.json()
         ).then(
         success => console.log(success)
@@ -52,10 +56,10 @@ function uploadImage() {
     reader.readAsDataURL(photoBlob);
     reader.onload = function () {
         let base64String = reader.result.split(',')[1];
-       // console.log(base64String);
+        // console.log(base64String);
         upload(base64String);
     };
-
+    // TODO: back to default view after this
 }
 
 
