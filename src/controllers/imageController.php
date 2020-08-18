@@ -34,6 +34,11 @@ class imageController
 
     }
 
+    public function displayImage($uid)
+    {
+        return($this->model->getImages($uid));
+    }
+
     public function checkUid()
     {
         if (!$_SESSION['uid']) {
