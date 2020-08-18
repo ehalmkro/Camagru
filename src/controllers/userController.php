@@ -11,7 +11,7 @@ class userController
         $this->model = new userModel();
     }
 
-    public function handleRequest()
+/*    public function handleRequest()
     {
         $op = trim($_SERVER['PATH_INFO'], '/'); //isset($_GET['op']) ? $_GET['op'] : NULL;
       //  print "requested stuff = " . $op . '<br/>' . PHP_EOL;
@@ -33,6 +33,11 @@ class userController
                     include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
                 break;
         }
+    }*/
+
+    public function getUserName($uid)
+    {
+        return $username = $this->model->getUserName($uid);
     }
 
     public function signUp()
@@ -44,7 +49,8 @@ class userController
             if ($this->model->signUp($username, $password, $email)) {
                 $user = $this->model->auth($username, $password);
                 $_SESSION['uid'] = $user;
-                include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
+               // include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
+                $this->redirect('index.php');
             }
         }
 
@@ -60,8 +66,10 @@ class userController
             $uid = $this->model->login($username, $password);
             if ($uid) {
                 $_SESSION['uid'] = $uid;
-                $user = $this->model->getUsername($uid);
+                /*$user = $this->model->getUsername($uid);
                 include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
+            */
+            $this->redirect('../index.php');
             }
         } else
             echo "Wrong username / password" . PHP_EOL;
@@ -70,7 +78,7 @@ class userController
     public function logout()
     {
         session_destroy();
-        $this->redirect("index.php");
+        $this->redirect("../index.php");
     }
 
     public function redirect($location)
