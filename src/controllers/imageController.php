@@ -4,7 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/imageModel.php';
 
 class imageController
 {
-    private $model;
+    public $model;
 
     function __construct()
     {
