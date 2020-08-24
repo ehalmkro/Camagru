@@ -43,7 +43,7 @@ class userModel
         $stmt->bindParam(':password', $password);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
-        echo "Added user " . $username . PHP_EOL;
+        //echo "Added user " . $username . PHP_EOL;
         return (TRUE);
     }
 

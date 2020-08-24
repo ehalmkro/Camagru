@@ -50,7 +50,7 @@ class userController
                 $user = $this->model->auth($username, $password);
                 $_SESSION['uid'] = $user;
                // include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
-                $this->redirect('index.php');
+                $this->redirect('/index.php');
             }
         }
 
@@ -69,7 +69,7 @@ class userController
                 /*$user = $this->model->getUsername($uid);
                 include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
             */
-            $this->redirect('../index.php');
+            $this->redirect('/index.php');
             }
         } else
             echo "Wrong username / password" . PHP_EOL;
@@ -78,7 +78,7 @@ class userController
     public function logout()
     {
         session_destroy();
-        $this->redirect("../index.php");
+        $this->redirect("/index.php");
     }
 
     public function redirect($location)
