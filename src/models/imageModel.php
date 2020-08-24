@@ -4,8 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/Core.class.php';
 
 class imageModel
 {
-    private $pdo;
     public $page;
+    public $lastPage;
+    private $pdo;
     private $maxPages;
     private $numRows;
     private $perPage;
@@ -16,6 +17,7 @@ class imageModel
         $core = Core::getInstance();
         $this->pdo = $core->pdo;
         $this->page = 0;
+        $this->lastPage = FALSE;
         $this->numRows = 0;
         $this->maxPages = 0;
         $this->perPage = 5;
@@ -54,10 +56,12 @@ class imageModel
             $this->page = 0;
             return NULL;
         }
+        if (($this->page + 1) * $this->perPage >= $this->numRows)
+            $this->lastPage = TRUE;
         if (empty($uid))
-            $stmt = $this->pdo->prepare("SELECT * FROM images LIMIT $limit, $this->perPage");
+            $stmt = $this->pdo->prepare("SELECT * FROM images ORDER BY iid DESC LIMIT $limit, $this->perPage");
         else
-            $stmt = $this->pdo->prepare("SELECT * FROM images WHERE uid = ? LIMIT $limit, $this->perPage");
+            $stmt = $this->pdo->prepare("SELECT * FROM images WHERE uid = ? ORDER BY iid DESC LIMIT $limit, $this->perPage");
         empty($uid) ? $stmt->execute() : $stmt->execute([$uid]);
         $this->dataArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();

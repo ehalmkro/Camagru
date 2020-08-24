@@ -1,10 +1,11 @@
-let video = document.getElementById("videoElement");
-let captureButton = document.getElementById("capturebutton");
-let retakeButton = document.getElementById("retakebutton");
-let uploadButton = document.getElementById("uploadbutton");
-let img = document.getElementById('photo');
+const video = document.getElementById("videoElement");
+const captureButton = document.getElementById("capturebutton");
+const retakeButton = document.getElementById("retakebutton");
+const uploadButton = document.getElementById("uploadbutton");
+const cancelButton = document.getElementById("cancelbutton");
+const img = document.getElementById('photo');
 let dragItem = document.getElementById('sticker');
-let container = document.getElementById("container");
+const container = document.getElementById("container");
 let containerPosition = container.getBoundingClientRect();
 
 
@@ -26,6 +27,7 @@ container.addEventListener("mouseup", dragEnd, false);
 container.addEventListener("mousemove", drag, false);
 
 uploadButton.addEventListener("click", uploadImage, false);
+cancelButton.addEventListener("click", cancelImage, false);
 
 const upload = (file) => {
 
@@ -59,9 +61,14 @@ function uploadImage() {
         // console.log(base64String);
         upload(base64String);
     };
+    window.opener.location.reload();
+    window.close();
     // TODO: back to default view after this
 }
 
+function cancelImage() {
+    window.close();
+}
 
 function dragStart(e) {
     if (e.type === "touchstart") {

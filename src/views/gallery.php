@@ -2,6 +2,7 @@
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/imageController.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/userController.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/src/views/header.php';
 
 $imageController = new imageController();
 $userController = new userController();
@@ -26,10 +27,19 @@ $image_array = $imageController->displayImage(NULL);
     <? foreach ($image_array as $k => $innerArray): ?>
         <div class="imageDiv">
             <img id="userImage" src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/>
-            <p> by user <? echo $userController->getUserName($innerArray['uid'])?> at <? echo $innerArray['date']?> </p>
+            <p> by user <? echo $userController->getUserName($innerArray['uid']) ?>
+                at <? echo $innerArray['date'] ?> </p>
         </div>
     <? endforeach; ?>
 </div>
+<? if ($page > 0): ?>
+    <a href="/src/views/gallery.php/<? echo $imageController->model->page - 1 // TODO: USER GETTER FOR THIS ?>" class="button">Previous page</a>
+<? endif; ?>
+<? if (!$imageController->model->lastPage): // TODO: USER GETTER FOR THIS ?>
+    <a href="/src/views/gallery.php/<? echo $imageController->model->page + 1 ?>" class="button">Next page</a>
+<? endif; ?>
+
+<script src="/public/js/infinite.js"></script>
 
 </BODY>
 
