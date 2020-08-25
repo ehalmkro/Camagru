@@ -1,15 +1,27 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
-require_once('isCli.php');
-require_once('../models/userModel.class.php');
-require_once('../models/DefaultTable.class.php');
+require_once( '/Users/ehalmkro/Hive/Camagru/config/database.php');
+//require_once('/Users/ehalmkro/Hive/Camagru/src/models/Core.class.php');
+//require_once('isCli.php');
+//require_once('../src/models/userModel.class.php');
+//require_once('/Users/ehalmkro/Hive/Camagru/src/models/imageModel.php');
+require_once('/Users/ehalmkro/Hive/Camagru/src/models/commentModel.php');
+//require_once('../src/models/DefaultTable.class.php');
+
+
 
 {
-    $lol = new userModel();
+    $_SERVER['DOCUMENT_ROOT'] = '/Users/ehalmkro/Hive/Camagru';
+    $lol = new commentModel();
+    var_dump($lol->getComments(2));
    // $lol->signup("esajuhani", "esaEsa91%", "nakki@vene.esa");
    //$lol->changePassword("10", "ESAesa91%", "esaEsa91%");
-    $lol->changeEmail(10, "ESAesa91%", "onkyl@esa.esa");
+/*    $image_array = $lol->getImages(NULL);
+    $lol->page = 1;
+    $image_array = $lol->getImages(NULL);
+    $lol->page = 2;
+    $image_array = $lol->getImages(NULL);
+    var_dump($image_array);*/
 
     /*
     $kama2 = array("uid" => 1, "email" => "nyt_on_uus");

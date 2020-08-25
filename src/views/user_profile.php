@@ -7,4 +7,3 @@
   //  include $_SERVER['DOCUMENT_ROOT'] . '/src/views/footer.php';
 
     $userController = new userController();
-    echo "hello " . $userController->getUserName($_SESSION['uid']);

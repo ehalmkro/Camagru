@@ -49,7 +49,7 @@ class imageModel
             $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM images");
         else
             $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM images WHERE uid = ?");
-        empty($uid) ? $stmt->execute() : $stmt->execute([$uid]);
+        empty($uid) ? $stmt->execute() : $stmt->execute([$uid]); // TODO: ADD TRY CATCH
         $queryData = $stmt->fetch();
         $this->numRows = $queryData[0];
         if ($this->numRows <= 0) {
