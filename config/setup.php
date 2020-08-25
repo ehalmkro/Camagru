@@ -41,4 +41,18 @@ try {
     exit(1);
 }
 
+try {
+    $comments = 'CREATE TABLE IF NOT EXISTS `comments`(
+    cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    iid int NOT NULL,
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    text varchar(600),
+    islike BOOLEAN,
+    uid int NOT NULL,
+    username VARCHAR(40))';
+    $pdo->exec($comments);
+}   catch (PDOException $e) {
+    echo 'Error: ' . $e->getMessage() . PHP_EOL;
+}
+
 ?>

@@ -29,6 +29,8 @@ $image_array = $imageController->displayImage(NULL);
             <img id="userImage" src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/>
             <p> by user <? echo $userController->getUserName($innerArray['uid']) ?>
                 at <? echo $innerArray['date'] ?> </p>
+            <button class="likeButton" id="<? echo $innerArray['iid']?>"></button>
+            <p class="likeCounter" id="<? echo $innerArray['iid']?>"> like(s)</p>
         </div>
     <? endforeach; ?>
 </div>
@@ -40,6 +42,7 @@ $image_array = $imageController->displayImage(NULL);
 <? endif; ?>
 
 <script src="/public/js/infinite.js"></script>
+<script src="/public/js/like.js"></script>
 
 </BODY>
 
