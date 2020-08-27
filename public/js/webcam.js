@@ -1,31 +1,16 @@
 const video = document.getElementById("videoElement");
-const captureButton = document.getElementById("capturebutton");
-const retakeButton = document.getElementById("retakebutton");
-const uploadButton = document.getElementById("uploadbutton");
-const cancelButton = document.getElementById("cancelbutton");
+const captureButton = document.getElementById("captureButton");
+const retakeButton = document.getElementById("retakeButton");
+const uploadButton = document.getElementById("uploadButton");
+const cancelButton = document.getElementById("cancelButton");
+const selectFileButton = document.getElementById("selectFileButton");
+const previewFileButton = document.getElementById("previewFileButton");
+const fileInput = document.getElementById("fileInput");
 const img = document.getElementById('photo');
-let dragItem = document.getElementById('sticker');
-const container = document.getElementById("container");
-let containerPosition = container.getBoundingClientRect();
 
-
-let active = false;
-let currentX;
-let currentY;
-let initialX;
-let initialY;
-let xOffset = 0;
-let yOffset = 0;
 let photoBlob;
 
-container.addEventListener("touchstart", dragStart, false);
-container.addEventListener("touchend", dragEnd, false);
-container.addEventListener("touchmove", drag, false);
-
-container.addEventListener("mousedown", dragStart, false);
-container.addEventListener("mouseup", dragEnd, false);
-container.addEventListener("mousemove", drag, false);
-
+selectFileButton.addEventListener("click", selectFile, false)
 uploadButton.addEventListener("click", uploadImage, false);
 cancelButton.addEventListener("click", cancelImage, false);
 
@@ -33,7 +18,6 @@ const upload = (file) => {
 
     let data = new FormData();
     data.append('file', file);
-    data.append('user', 'test');
     fetch('../../index.php/imageController/uploadImage', {
         method: "POST",
         mode: "same-origin",
@@ -53,6 +37,31 @@ const upload = (file) => {
     );
 };
 
+function selectFile() {
+    hideElements(selectFileButton, captureButton, video); // TODO: PAUSE VIDEO PROPERLY
+    showElements(previewFileButton, fileInput, img);
+    img.style.visibility = 'hidden';
+    previewFileButton.addEventListener("click", res => {
+        const selectedFile = document.getElementById("fileInput").files[0];
+        if (selectedFile === undefined || selectedFile.size > 5120000 || (selectedFile.type !== 'image/png' && selectedFile.type !== 'image/jpeg')) {
+            console.log(selectedFile.type);
+            alert("Invalid file!");
+        }
+        else {
+            let reader = new FileReader();
+            reader.readAsDataURL(selectedFile);
+            img.style.visibility = 'visible';
+            reader.addEventListener("load", function () {
+                // convert image file to base64 string
+                img.src = reader.result;
+                photoBlob = selectedFile;
+                showElements(uploadButton);
+            }, false);
+            reader.readAsDataURL(selectedFile);
+            }
+    });
+}
+
 function uploadImage() {
     let reader = new FileReader();
     reader.readAsDataURL(photoBlob);
@@ -68,46 +77,6 @@ function uploadImage() {
 
 function cancelImage() {
     window.close();
-}
-
-function dragStart(e) {
-    if (e.type === "touchstart") {
-        initialX = e.touches[0].clientX - xOffset;
-        initialY = e.touches[0].clientY - yOffset;
-    } else {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-    }
-    if (e.target === dragItem)
-        active = true;
-}
-
-function dragEnd(e) {
-    initialX = currentX;
-    initialY = currentY;
-    active = false;
-}
-
-function drag(e) {
-    if (active) {
-        e.preventDefault();
-        containerPosition = container.getBoundingClientRect();
-        if (e.type === "touchmove") {
-            currentX = e.touches[0].clientX - initialX;
-            currentY = e.touches[0].clientY - initialY;
-        } else {
-            currentX = containerPosition.right > xOffset + initialX ? e.clientX - initialX : containerPosition.right - initialX;
-            currentY = containerPosition.bottom - 20 > yOffset + initialY ? e.clientY - initialY : containerPosition.bottom - initialY - 20;
-        }
-        xOffset = currentX;
-        yOffset = currentY;
-        setTranslate(currentX, currentY, dragItem);
-    }
-}
-
-function setTranslate(xPos, yPos, el) {
-    el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
-
 }
 
 function takePicture(mediaStreamTrack, imageCapture) {
@@ -141,11 +110,17 @@ function gotMedia(mediaStream) {
     }, false);
 }
 
+function noWebcam() {
+    hideElements(video, captureButton);
+    showElements(img);
+    img.src = "/public/img/resources/noWebcam.png";
+}
+
 if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia({video: true})
         .then(gotMedia)
         .catch(function (err) {
-            console.log("Something went wrong!");
+            noWebcam();
         });
 }
 

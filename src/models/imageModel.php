@@ -23,7 +23,7 @@ class imageModel
         $this->perPage = 5;
     }
 
-    public function addImage($uid, $file)
+    public function addImage($uid, $file) // TODO: add checks for image type etc
     {
         $filename = uniqid("img_");
         if (strlen($file) > 5120000 || !strlen($file)) {
@@ -35,7 +35,7 @@ class imageModel
                                     VALUES (?, ?)");
             $stmt->execute([$uid, $filename]);
         } catch (PDOException $e) {
-            //   echo "Error: " . $e->getMessage();
+            echo "Error: " . $e->getMessage();
             return FALSE;
         }
         file_put_contents($_SERVER['DOCUMENT_ROOT'] . "/public/img/uploads/" . $filename . ".jpg", $file);
