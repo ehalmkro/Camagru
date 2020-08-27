@@ -27,22 +27,31 @@ $image_array = $imageController->displayImage(NULL);
     <? foreach ($image_array as $k => $innerArray): ?>
         <div class="imageDiv">
             <img id="userImage" src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/>
-            <p> by user <? echo $userController->getUserName($innerArray['uid']) ?>
+            <p> by user <? echo $userController->returnUserName($innerArray['uid']) ?>
                 at <? echo $innerArray['date'] ?> </p>
-            <button class="likeButton" id="<? echo $innerArray['iid']?>"></button>
-            <p class="likeCounter" id="<? echo $innerArray['iid']?>"> like(s)</p>
+            <button class="likeButton" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
+            <div class="commentBar">
+                <p class="likeCounter" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
+                <p class="commentCounter" id="commentCounter.<? echo $innerArray['iid'] ?>"></p>
+                <div class="comments" id="comments.<? echo $innerArray['iid'] ?>"></div>
+                <input type="text" class="commentField" placeholder="Comment"
+                       id="commentField.<? echo $innerArray['iid'] ?>">
+                <button class="commentButton" id="commentButton.<? echo $innerArray['iid'] ?>">Send</button>
+            </div>
         </div>
     <? endforeach; ?>
 </div>
 <? if ($page > 0): ?>
-    <a href="/src/views/gallery.php/<? echo $imageController->model->page - 1 // TODO: USER GETTER FOR THIS ?>" class="button">Previous page</a>
+    <a href="/src/views/gallery.php/<? echo $imageController->model->page - 1 // TODO: USER GETTER FOR THIS ?>"
+       class="button">Previous page</a>
 <? endif; ?>
 <? if (!$imageController->model->lastPage): // TODO: USER GETTER FOR THIS ?>
     <a href="/src/views/gallery.php/<? echo $imageController->model->page + 1 ?>" class="button">Next page</a>
 <? endif; ?>
 
 <script src="/public/js/infinite.js"></script>
-<script src="/public/js/like.js"></script>
+<script type="text/javascript">let sessionUid = "<?php echo $_SESSION['uid']?>"</script>
+<script src="/public/js/likecomment.js"></script>
 
 </BODY>
 
