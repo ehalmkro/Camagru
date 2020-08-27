@@ -11,33 +11,37 @@ class userController
         $this->model = new userModel();
     }
 
-/*    public function handleRequest()
-    {
-        $op = trim($_SERVER['PATH_INFO'], '/'); //isset($_GET['op']) ? $_GET['op'] : NULL;
-      //  print "requested stuff = " . $op . '<br/>' . PHP_EOL;
-        switch ($op) {
-            case 'logout':
-                $this->logout();
-                break;
-            case 'login':
-                $this->login();
-                break;
-            case 'signUp':
-                $this->signUp();
-                break;
-            case NULL:
-                if (isset($_SESSION['uid'])) {
-                    $user = $this->model->getUsername($_SESSION['uid']);
-                    include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
-                } else
-                    include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
-                break;
-        }
-    }*/
-
-    public function getUserName($uid)
+    public function returnUserName($uid)
     {
         return $username = $this->model->getUserName($uid);
+    }
+
+    public function getSessionUid()
+    {
+
+        if (empty($_POST['uid']))
+            echo json_encode(array(
+                "status" => "failed to get session uid",
+                "error" => true));
+        else
+            echo json_encode(array(
+                "status" => "success",
+                "error" => false,
+                "uid" => $_SESSION['uid']));
+        return;
+    }
+
+    public function getUserName()
+    {
+
+        if (empty($_POST['uid']))
+            return;
+        echo json_encode(array(
+            "status" => "success",
+            "error" => false,
+            "username" => $this->model->getUsername($_POST['uid'])));
+        return;
+
     }
 
     public function signUp()
@@ -49,7 +53,7 @@ class userController
             if ($this->model->signUp($username, $password, $email)) {
                 $user = $this->model->auth($username, $password);
                 $_SESSION['uid'] = $user;
-               // include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
+                // include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
                 $this->redirect('/index.php');
             }
         }
@@ -69,7 +73,7 @@ class userController
                 /*$user = $this->model->getUsername($uid);
                 include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
             */
-            $this->redirect('/index.php');
+                $this->redirect('/index.php');
             }
         } else
             echo "Wrong username / password" . PHP_EOL;

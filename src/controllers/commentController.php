@@ -25,15 +25,25 @@ class commentController
             return FALSE;
         }
         // TODO: add timestamp check so no spam or smth...
-        return $this->model->addComment($_POST['iid'], $_SESSION['uid'], $this->userModel->getUsername($_SESSION['uid']),
-            preg_replace('/\s\s+/', ' ', $_POST['text']));
+        if (!$this->model->addComment($_POST['iid'], $_SESSION['uid'], $this->userModel->getUsername($_SESSION['uid']),
+            preg_replace('/\s\s+/', ' ', $_POST['text'])))
+            echo json_encode(array(
+                "success" => false));
+        else
+            echo json_encode(array(
+                "success" => true));
     }
 
     function getComments()
     {
         if (!$_POST['iid'])
             return FALSE;
-        return $this->model->getComments($_POST['iid']);
+        $array = $this->model->getComments($_POST['iid']);
+        echo json_encode(array(
+            "status" => "success",
+            "error" => false,
+            "comments" => $array));
+        return TRUE;
     }
 
     function addLike()
@@ -56,6 +66,19 @@ class commentController
                 "liked" => false));
     }
 
+    function removeComment()
+    {
+        if ((!$_SESSION['uid'] || !$_POST['cid']) || !$this->model->removeComment($_POST['cid'], $_SESSION['uid']))
+            echo json_encode(array(
+                "status" => "fail",
+                "error" => true));
+        else
+            echo json_encode(array(
+                "status" => "success",
+                "error" => true));
+        return;
+    }
+
     function removeLike()
     {
         if (!$_SESSION['uid'] || !$_POST['iid'])
@@ -67,9 +90,9 @@ class commentController
     {
         $array = $this->model->getLikes($_POST['iid']);
         echo json_encode(array(
-                "status" => "success",
-                "error" => false,
-                "likes" => count($array)));
+            "status" => "success",
+            "error" => false,
+            "likes" => count($array)));
         return;
     }
 }

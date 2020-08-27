@@ -29,15 +29,15 @@ switch ($controller) {
         break;
     }
 
-    case 'takePicture':
+    case 'takePicture': // TODO: add checks for user login
     {
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/webcam.php';
         break;
     }
+
     default:
         if (isset($_SESSION['uid']))
             include $_SERVER['DOCUMENT_ROOT'] . '/src/views/gallery.php';
         else
             include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
 }
-?>

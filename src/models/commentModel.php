@@ -28,12 +28,12 @@ class commentModel
         return TRUE;
     }
 
-    public function removeComment($iid, $uid)
+    public function removeComment($cid, $uid)
     {
         try {
             $stmt = $this->pdo->prepare('DELETE FROM 
-                                comments WHERE iid=? AND uid=? AND islike=FALSE');
-            $stmt->execute([$iid, $uid]);
+                                comments WHERE cid=? AND uid=? AND islike=FALSE');
+            $stmt->execute([$cid, $uid]);
         } catch (PDOException $e) {
             echo "Error: ." . $e->getMessage();
             return FALSE;
@@ -45,9 +45,9 @@ class commentModel
     {
         try {
             if (empty($iid))
-                $stmt = $this->pdo->prepare('SELECT * FROM comments');
+                $stmt = $this->pdo->prepare('SELECT * FROM comments WHERE islike =FALSE ORDER BY cid DESC');
             else
-                $stmt = $this->pdo->prepare('SELECT * FROM comments WHERE iid=?');
+                $stmt = $this->pdo->prepare('SELECT * FROM comments WHERE iid=? AND islike=FALSE ORDER BY cid DESC');
             empty($iid) ? $stmt->execute() : $stmt->execute([$iid]);
             $this->dataArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $stmt->closeCursor();
