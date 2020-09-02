@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../public/css/style.css">
     <script>
         function pop_up(url) {
-            window.open(url, 'win2', 'status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=520,directories=no,location=no')
+            window.open(url, 'win2', 'status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=640,directories=no,location=no')
         }
     </script>
 

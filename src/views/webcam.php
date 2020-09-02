@@ -17,6 +17,22 @@
             <button class="webcamButton" id="previewFileButton">Preview file</button>
             <button class="webcamButton" id="cancelButton">Close</button>
         </div>
+        <div id="stickerBar">
+            <ul>
+                <li><input type="checkbox" id="cb1" />
+                    <label for="cb1"><img id = "cb1img" src="/public/img/stickers/poop.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cb2" />
+                    <label for="cb2"><img id = "cb2img" src="/public/img/stickers/hat.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cb3" />
+                    <label for="cb3"><img id = "cb3img" src="/public/img/stickers/hive.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cb4" />
+                    <label for="cb4"><img id = "cb4img" src="/public/img/stickers/tornio.png" /></label>
+                </li>
+            </ul>
+        </div>
     </div>
 <script src="/public/js/webcam.js"></script>
 </body>

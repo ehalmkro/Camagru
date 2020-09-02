@@ -68,4 +68,10 @@ class imageModel
 
         return $this->dataArray;
     }
+
+    public function addStickers($file, $stickerArray)
+    {
+
+        return $file;
+    }
 }
