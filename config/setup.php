@@ -20,9 +20,10 @@ try {
 try {
     $users = 'CREATE TABLE IF NOT EXISTS `users` (
 	uid int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	username VARCHAR(40),
-	password VARCHAR(255),
-	email VARCHAR(255))';
+	username VARCHAR(40) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+    confirmationCode VARCHAR(255))';
     $pdo->exec($users);
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage() . PHP_EOL;

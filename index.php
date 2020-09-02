@@ -7,7 +7,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/commentController.php
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 $controller = $request[0];
 $method = $request[1];
-$argument = $request[2];
 
 switch ($controller) {
     case 'userController':
@@ -34,6 +33,15 @@ switch ($controller) {
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/webcam.php';
         break;
     }
+
+    case 'resetPassword':
+    {
+        $_SESSION['uid'] = $request[1];
+        $_SESSION['confirmationCode'] = $request[2];
+        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/reset_password.php';
+        break;
+    }
+
 
     default:
         if (isset($_SESSION['uid']))

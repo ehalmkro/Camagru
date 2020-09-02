@@ -10,10 +10,10 @@ class userModel
         // session_start();
         $core = Core::getInstance();
         $this->pdo = $core->pdo;
-    //    $this->tableName = "users";
-    //    $this->fieldList = array('uid', 'username', 'password', 'email');
-    //    $this->fieldList['uid'] = array('pkey' => 'y');
-    //    $this->pkey = 'uid';
+        //    $this->tableName = "users";
+        //    $this->fieldList = array('uid', 'username', 'password', 'email');
+        //    $this->fieldList['uid'] = array('pkey' => 'y');
+        //    $this->pkey = 'uid';
     }
 
     public function signUp($username, $password, $email)
@@ -33,15 +33,16 @@ class userModel
             echo "Wrong email format" . PHP_EOL;
             return FALSE;
         }
-
+        $confirmationCode= bin2hex(random_bytes(32));
         $password = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->pdo->prepare("INSERT INTO 
-									users (username, password, email) 
-									VALUES (:username, :password, :email);");
+									users (username, password, email, confirmationCode) 
+									VALUES (:username, :password, :email, :confirmationCode);");
 
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
         $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':confirmationCode', $confirmationCode);
         $stmt->execute(); //TODO: ADD TRY
         //echo "Added user " . $username . PHP_EOL;
         return (TRUE);
@@ -65,7 +66,6 @@ class userModel
         $uid = $this->auth($username, $password);
         if ($uid === FALSE)
             return FALSE;
-        $_SESSION['uid'] = $uid;
         return $uid;
     }
 
@@ -91,8 +91,27 @@ class userModel
         return FALSE;
     }
 
+    public function getUid($username)
+    {
+        $stmt = $this->pdo->prepare("SELECT uid FROM users WHERE username=?");
+        $stmt->execute([$username]);
+        if ($uid = $stmt->fetch())
+            return $uid['uid'];
+        return FALSE;
+    }
+
+    public function getUserdata($uid)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->execute([$uid]);
+        if ($dataArray = $stmt->fetchAll(PDO::FETCH_ASSOC))
+            return $dataArray;
+        return FALSE;
+    }
+
     public function changeLoginDetail($uid, $newValue, $columnName)
     {
+        echo "UPDATE users SET $columnName = $newValue WHERE uid = $uid";
         try {
             $stmt = $this->pdo->prepare("UPDATE users SET $columnName = ? WHERE uid = ?");
             $stmt->execute([$newValue, $uid]);

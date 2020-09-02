@@ -18,4 +18,10 @@ Sign up
     <input type="email" name="email" placeholder="enter email" required>
     <button type="submit" name="signupbtn">Sign up</button>
 </form>
+
+Reset password
+<form action="/userController/sendResetMail" method="POST">
+    <input type="text" name="username" placeholder="enter username" required>
+    <button type="submit" name="resetbtn">Reset</button>
+</form>
 </html>

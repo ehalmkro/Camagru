@@ -19,7 +19,7 @@ class userController
     public function getSessionUid()
     {
 
-        if (empty($_POST['uid']))
+        if (empty($_SESSION['uid']))
             echo json_encode(array(
                 "status" => "failed to get session uid",
                 "error" => true));
@@ -42,6 +42,43 @@ class userController
             "username" => $this->model->getUsername($_POST['uid'])));
         return;
 
+    }
+
+
+    public function sendResetMail()
+    {
+        if (($userdata = $this->model->getUserdata($this->model->getUid($_POST['username']))[0]) === FALSE || !isset($_POST['resetbtn'])) {
+            return;
+        }
+        echo $userdata['email'],
+        "Password reset",
+            "It seems you forgot your password. Reset it by clicking here " .
+            "http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/resetPassword/" . $userdata['uid'] . "/" .
+            $userdata['confirmationCode'];
+
+        mail($userdata['email'],
+            "Password reset",
+            "It seems you forgot your password. Reset it by clicking here " .
+            $_SERVER['SERVER_PORT'] . "/resetPassword/" . $userdata['uid'] . "/" .
+            $userdata['confirmationCode']);
+    }
+
+    public function resetPassword()
+    {
+        $userdata = $this->model->getUserdata($_SESSION['uid'])[0];
+        if ($userdata['confirmationCode'] !== $_SESSION['confirmationCode'] || $_POST['newPass'] !== $_POST['newPass2']
+            || !isset($_POST['passwordbtn'])) {
+            echo "Error, try again!";
+            return;
+        }
+        $password = password_hash($_POST['newPass'], PASSWORD_DEFAULT);
+        if (($this->model->changeLoginDetail($userdata['uid'], $password,
+                "password") === TRUE)) {
+            $this->model->changeLoginDetail($userdata['uid'], bin2hex(random_bytes(32)), "confirmationCode"); //TODO: move to model?
+            $this->logout();
+        }
+        else
+            echo "Error!";
     }
 
     public function signUp()
