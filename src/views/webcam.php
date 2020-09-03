@@ -1,3 +1,6 @@
+<? if (!$_SESSION['uid'])
+header("Location: /index.php"); ?>
+
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
@@ -6,7 +9,7 @@
 </head>
 <body>
     <div id="webcamContainer">
-        <video autoplay="true" id="videoElement"></video>
+        <video width="800" autoplay="true" id="videoElement"></video>
         <img src="" id="photo" alt="The screen capture will appear in this box.">
         <div class = "toolBar">
             <button class="webcamButton" id="captureButton">Take photo</button>

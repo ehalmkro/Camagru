@@ -34,6 +34,12 @@ switch ($controller) {
         break;
     }
 
+    case 'viewImage':
+    {
+        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/view_image.php';
+        break;
+    }
+
     case 'resetPassword':
     {
         $_SESSION['uid'] = $request[1];

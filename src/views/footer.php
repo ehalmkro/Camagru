@@ -1,2 +1,1 @@
-<?php
-    include 'gallery.php';
+<p id="footerText"> ehalmkro <? echo date("Y"); ?></p>

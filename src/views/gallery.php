@@ -7,52 +7,59 @@ include $_SERVER['DOCUMENT_ROOT'] . '/src/views/header.php';
 $imageController = new imageController();
 $userController = new userController();
 
-$image_array = $imageController->displayImage(NULL);
+$image_array = $imageController->displayImageByUser(NULL);
 
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 $page = $request[0];
 $page = $page == NULL ? 0 : $page;
 $imageController->model->page = $page;
-$image_array = $imageController->displayImage(NULL);
+$image_array = $imageController->displayImageByUser(NULL); //TODO: this from post to get
 ?>
 
-<HTML>
-<HEAD>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
-          integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
-    <link rel="stylesheet" href="/public/css/style.css">
-</HEAD>
-<BODY>
-<div class="gallery">
-    <? foreach ($image_array as $k => $innerArray): ?>
-        <div class="imageDiv">
-            <img id="userImage" src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/>
-            <p> by user <? echo $userController->returnUserName($innerArray['uid']) ?>
-                at <? echo $innerArray['date'] ?> </p>
-            <button class="likeButton" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
-            <div class="commentBar">
-                <p class="likeCounter" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
-                <p class="commentCounter" id="commentCounter.<? echo $innerArray['iid'] ?>"></p>
-                <div class="comments" id="comments.<? echo $innerArray['iid'] ?>"></div>
-                <input type="text" class="commentField" placeholder="Comment"
-                       id="commentField.<? echo $innerArray['iid'] ?>">
-                <button class="commentButton" id="commentButton.<? echo $innerArray['iid'] ?>">Send</button>
-            </div>
-        </div>
-    <? endforeach; ?>
-</div>
-<? if ($page > 0): ?>
-    <a href="/src/views/gallery.php/<? echo $imageController->model->page - 1 // TODO: USER GETTER FOR THIS ?>"
-       class="button">Previous page</a>
-<? endif; ?>
-<? if (!$imageController->model->lastPage): // TODO: USER GETTER FOR THIS ?>
-    <a href="/src/views/gallery.php/<? echo $imageController->model->page + 1 ?>" class="button">Next page</a>
-<? endif; ?>
+    <HTML>
+    <HEAD>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
+              integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="/public/css/style.css">
+    </HEAD>
+    <BODY>
+    <div class="gallery">
+        <? if (empty($image_array)): ?>
+            <p>Seems to be a bit empty here, why don't you add some stuff?</p>
+        <? else: { ?>
+            <? foreach ($image_array as $k => $innerArray): ?>
+                <div class="galleryImage">
+                    <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>"><img id="userImage"
+                                                                             src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/></a>
+                    <p> by user <? echo $userController->returnUserName($innerArray['uid']) ?>
+                        at <? echo $innerArray['date'] ?> </p>
+                    <button class="likeButton" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
+                    <div class="commentBar">
+                        <p class="likeCounter" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
+                        <p class="commentCounter" id="commentCounter.<? echo $innerArray['iid'] ?>"></p>
+                        <div class="comments" id="comments.<? echo $innerArray['iid'] ?>"></div>
+                        <input type="text" class="commentField" placeholder="Comment"
+                               id="commentField.<? echo $innerArray['iid'] ?>">
+                        <button class="commentButton" id="commentButton.<? echo $innerArray['iid'] ?>">Send</button>
+                    </div>
+                </div>
+            <? endforeach;
+        } endif; ?>
+    </div>
+    <? if ($page > 0): ?>
+        <a href="/src/views/gallery.php/<? echo $imageController->model->page - 1 // TODO: USER GETTER FOR THIS ?>"
+           class="button">Previous page</a>
+    <? endif; ?>
+    <? if (!$imageController->model->lastPage): // TODO: USER GETTER FOR THIS ?>
+        <a href="/src/views/gallery.php/<? echo $imageController->model->page + 1 ?>" class="button">Next page</a>
+    <? endif; ?>
 
-<script src="/public/js/infinite.js"></script>
-<script type="text/javascript">let sessionUid = "<?php echo $_SESSION['uid']?>"</script>
-<script src="/public/js/likecomment.js"></script>
+    <script src="/public/js/infinite.js"></script>
+    <script type="text/javascript">let sessionUid = "<?php echo $_SESSION['uid']?>"</script>
+    <script src="/public/js/likecomment.js"></script>
 
-</BODY>
+    </BODY>
 
-</HTML>
+    </HTML>
+<?php include("footer.php");

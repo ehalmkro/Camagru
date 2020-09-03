@@ -42,7 +42,7 @@ class imageModel
         return TRUE;
     }
 
-    public function getImages($uid)
+    public function getImagesByUser($uid)
     {
         $limit = $this->page * $this->perPage;
         if (empty($uid))
@@ -67,6 +67,19 @@ class imageModel
         $stmt->closeCursor();
 
         return $this->dataArray;
+    }
+
+    public function getImageByIid($iid)
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM images WHERE iid=?");
+            $stmt->execute([$iid]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e)
+        {
+            echo "Error fetching image: " . $e->getMessage();
+            return NULL;
+        }
     }
 
     public function addStickers($file, $stickerArray)
