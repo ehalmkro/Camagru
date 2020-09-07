@@ -17,9 +17,9 @@ const canvas = document.createElement("canvas");
 canvas.setAttribute('width', "640");
 canvas.setAttribute('height', "480");
 const ctx = canvas.getContext("2d");
+canvas.style.display = "none";
 
-container.appendChild(canvas);
-
+container.insertBefore(canvas, img);
 let photoBlob;
 
 const elementList = document.querySelectorAll("input");
@@ -94,7 +94,7 @@ const upload = (file) => {
 };
 
 
-function selectFile() {
+function selectFile() { // TODO: MOVE THIS TO CANVAS TO GET RID OF img completely
     hideElements(selectFileButton, captureButton, video); // TODO: PAUSE VIDEO PROPERLY
     showElements(previewFileButton, fileInput, img);
     img.style.visibility = 'hidden';
@@ -107,6 +107,8 @@ function selectFile() {
         } else {
             let reader = new FileReader();
             reader.readAsDataURL(selectedFile);
+            let image = new Image();
+            image.src = selectedFile;
             img.style.visibility = 'visible';
             reader.addEventListener("load", function () {
                 // convert image file to base64 string
@@ -140,14 +142,14 @@ function cancelImage() {
 function takePicture(mediaStreamTrack, imageCapture) {
     imageCapture.takePhoto()
         .then(blob => {
-            hideElements(video, captureButton, selectFileButton);
-            showElements(uploadButton);
+            hideElements(video, captureButton, selectFileButton, img);
+            showElements(uploadButton, canvas);
             photoBlob = blob;
             previewPic = new Image();
             previewPic.src = URL.createObjectURL(blob);
             ctx.drawImage(video, 0, 0);
             drawImage();
-            showElements(img, retakeButton);
+            showElements(retakeButton);
             retakeButton.addEventListener('click', function (ev) {
                 ev.preventDefault();
                 hideElements(img, uploadButton, retakeButton);
