@@ -41,11 +41,13 @@ class imageController
 
     public function uploadImage()
     {
-        if (($uid = $this->checkUid()) == FALSE || !$_POST['file'])
+        if (($uid = $this->checkUid()) == FALSE || !$_POST['file']) {
             echo json_encode([
                 "status" => "fail",
                 "error" => true,
                 "message" => "No image"]);
+            return ;
+        }
         $file = $_POST['file'];
         $file = base64_decode((str_replace(' ', '+', $file)));
         if ($_POST['stickerArray']) {
@@ -63,6 +65,38 @@ class imageController
                 "message" => "Image upload FAILED");
         echo json_encode($response);
 
+    }
+
+    public function deleteImage()
+    {
+        if (($uid = $this->checkUid()) == FALSE || !$_POST['iid'])
+            return ;
+        if ($this->model->deleteImage($_POST['iid']))
+            $response = array(
+                "status" => "success",
+                "error" => false,
+                "message" => "Image deleted");
+        else
+            $response = array(
+                "status" => "fail",
+                "error" => true,
+                "message" => "Image deletion FAILED");
+        echo json_encode($response);
+
+    }
+
+    public function getPage()
+    {
+        return $this->model->page;
+    }
+
+    public function setPage($page)
+    {
+        $this->model->page = $page;
+    }
+
+    public function isLastPage(){
+        return $this->model->lastPage;
     }
 
     public function displayImageByUser($uid)

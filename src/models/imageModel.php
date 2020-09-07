@@ -82,9 +82,17 @@ class imageModel
         }
     }
 
-    public function addStickers($file, $stickerArray)
+    public function deleteImage($iid)
     {
-
-        return $file;
+        try {
+            $stmt = $this->pdo->prepare("DELETE FROM images WHERE iid=?");
+            $stmt->execute([$iid]);
+            return TRUE;
+        } catch (PDOException $e)
+        {
+            echo "Error fetching image: " . $e->getMessage();
+            return NULL;
+        }
     }
+
 }

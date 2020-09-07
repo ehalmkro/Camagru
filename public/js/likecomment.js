@@ -40,12 +40,12 @@ function listenLikeButtons() {
 function printComments(item, index, array) {
     let iid = item['iid'];
     let newDiv = document.createElement("div");
-    newDiv.className = "commentDiv";
+
+   newDiv.className = "commentDiv";
     let newContent = document.createElement("p");
     newContent.className ="commentText";
     let commentText = document.createTextNode(item['username'] + ": " + item['text']);
     newContent.appendChild(commentText);
-    document.getElementById("commentCounter." + iid).innerText = array.length + " comments";
     newDiv.appendChild(newContent);
     document.getElementById("comments." + iid).appendChild(newDiv);
     if (item['uid'] === sessionUid) {
@@ -87,7 +87,11 @@ function getComments() {
             body: data
         }).then(response => response.json()
         ).then(
-            success => success['comments'].forEach(printComments)
+            success =>{
+                document.getElementById("commentCounter." + comments[i].id.split(".")[1]).innerText = success['comments'].length + " comment(s)";
+                if (document.getElementsByClassName("comments"))
+                    success['comments'].forEach(printComments);
+            }
         ).catch(
             error => console.log(error)
         );

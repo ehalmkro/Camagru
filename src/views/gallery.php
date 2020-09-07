@@ -1,19 +1,23 @@
 <?php
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/imageController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/commentController.php';
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/userController.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/src/views/header.php';
 
 $imageController = new imageController();
 $userController = new userController();
+$commentController = new commentController();
 
 $image_array = $imageController->displayImageByUser(NULL);
 
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
-$page = $request[0];
+$page = $_GET['page'];
 $page = $page == NULL ? 0 : $page;
 $imageController->model->page = $page;
-$image_array = $imageController->displayImageByUser(NULL); //TODO: this from post to get
+$image_array = $imageController->displayImageByUser(NULL);
+
 ?>
 
     <HTML>
@@ -30,29 +34,28 @@ $image_array = $imageController->displayImageByUser(NULL); //TODO: this from pos
         <? else: { ?>
             <? foreach ($image_array as $k => $innerArray): ?>
                 <div class="galleryImage">
-                    <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>"><img id="userImage"
-                                                                             src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/></a>
+                    <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>"><img
+                                id="userImage"
+                                src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/></a>
                     <p> by user <? echo $userController->returnUserName($innerArray['uid']) ?>
                         at <? echo $innerArray['date'] ?> </p>
                     <button class="likeButton" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
                     <div class="commentBar">
                         <p class="likeCounter" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
-                        <p class="commentCounter" id="commentCounter.<? echo $innerArray['iid'] ?>"></p>
-                        <div class="comments" id="comments.<? echo $innerArray['iid'] ?>"></div>
-                        <input type="text" class="commentField" placeholder="Comment"
-                               id="commentField.<? echo $innerArray['iid'] ?>">
-                        <button class="commentButton" id="commentButton.<? echo $innerArray['iid'] ?>">Send</button>
+                        <p class="commentCounter"
+                           id="commentCounter.<? echo $innerArray['iid'] ?>"><? echo $commentController->getCommentCount($innerArray['iid']); ?>
+                            comment(s)</p>
                     </div>
                 </div>
             <? endforeach;
         } endif; ?>
     </div>
     <? if ($page > 0): ?>
-        <a href="/src/views/gallery.php/<? echo $imageController->model->page - 1 // TODO: USER GETTER FOR THIS ?>"
+        <a href="/src/views/gallery.php/?page=<? echo $imageController->getPage() - 1 ?>"
            class="button">Previous page</a>
     <? endif; ?>
     <? if (!$imageController->model->lastPage): // TODO: USER GETTER FOR THIS ?>
-        <a href="/src/views/gallery.php/<? echo $imageController->model->page + 1 ?>" class="button">Next page</a>
+        <a href="/src/views/gallery.php/?page=<? echo $imageController->getPage() + 1 ?>" class="button">Next page</a>
     <? endif; ?>
 
     <script src="/public/js/infinite.js"></script>

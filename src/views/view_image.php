@@ -13,6 +13,7 @@ $userController = new userController();
 $commentController = new commentController();
 
 $iid = $_GET['iid'];
+$fromPage = $_GET['fromPage'];
 
 $imageArray = $imageController->displayImageByIid($iid);
 
@@ -25,7 +26,7 @@ $imageArray = $imageController->displayImageByIid($iid);
     <link rel="stylesheet" href="/public/css/style.css">
 </HEAD>
 <BODY>
-<a href="/index.php">Back to gallery</a>
+<a href="/src/views/gallery.php/?page=<? echo $fromPage ?>">Back to gallery</a>
 <div class="imageDisplay">
     <? if (empty($imageArray)): ?>
         <p>Nothing here!</p>
@@ -33,6 +34,9 @@ $imageArray = $imageController->displayImageByIid($iid);
         <img id="viewImage" alt="Picture"
              src='/public/img/uploads/<? echo $imageArray['imageHash'] . '.jpg' ?>'
              title="<? echo $userController->returnUserName($imageArray['uid']) ?> at <? echo $imageArray['date'] ?> "/>
+        <? if ($_SESSION['uid'] === $imageArray['uid']): ?>
+            <button onclick="deleteImage()">Delete</button>
+        <? endif; ?>
         <button class="likeButton" id="likeButton.<? echo $imageArray['iid'] ?>"></button>
         <div class="commentBar">
             <p class="likeCounter" id="likeCounter.<? echo $imageArray['iid'] ?>"> like(s)</p>
@@ -43,8 +47,28 @@ $imageArray = $imageController->displayImageByIid($iid);
             <button class="commentButton" id="commentButton.<? echo $imageArray['iid'] ?>">Send</button>
         </div>
     <? endif; ?>
-
 </div>
+<script type="text/javascript">
+    let sessionUid = "<? echo $_SESSION['uid']?>";
+    let iid = "<? echo $imageArray['iid']?>";
+
+    function deleteImage() {
+        let data = new FormData();
+        data.append('iid', iid);
+        fetch('../../index.php/imageController/deleteImage', {
+            method: "POST",
+            mode: "same-origin",
+            credentials: "same-origin",
+            body: data
+        })
+            .then(response => response.json()
+            ).then(
+            success => window.location.replace("/index.php")
+        ).catch(
+            error => console.log(error)
+        );
+    }
+</script>
 <script src="/public/js/likecomment.js"></script>
 
 </BODY>

@@ -46,6 +46,12 @@ class commentController
         return TRUE;
     }
 
+    function getCommentCount($iid)
+    {
+        $array = $this->model->getComments($iid);
+        return count($array);
+    }
+
     function addLike()
     {
         if (!$_SESSION['uid'] || !$_POST['iid']) {
