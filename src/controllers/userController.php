@@ -16,6 +16,11 @@ class userController
         return $username = $this->model->getUserName($uid);
     }
 
+    public function getUserData($uid)
+    {
+        return $this->model->getUserdata($uid);
+    }
+
     public function getSessionUid()
     {
 
@@ -97,10 +102,30 @@ class userController
 
     }
 
+    public function changeUsername()
+    {
+        if (isset($_SESSION['uid']) && isset($_POST['newUsername']))
+            if ($this->model->changeUserName($_SESSION['uid'], $_POST['password'], $_POST['newUsername']))
+                $this->redirect("/index.php/userSettings");
+            else
+                echo "Error!";
+    }
+    public function changeEmail()
+    {
+        if (isset($_SESSION['uid']) && isset($_POST['newEmail']))
+        {
+            if ($this->model->changeEmail($_SESSION['uid'], $_POST['password'], $_POST['newEmail']))
+                $this->redirect("/index.php/userSettings");
+            else
+                echo "Error!";
+
+        }
+    }
+
     public function login()
     {
         if (isset($_SESSION['uid']))
-            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
+            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_settings.php';
         else if (isset($_POST['loginbtn'])) {
             $username = $_POST['username'];
             $password = $_POST['password'];

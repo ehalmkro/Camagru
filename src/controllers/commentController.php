@@ -3,16 +3,19 @@
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/commentModel.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/userModel.class.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/imageModel.php';
 
 class commentController
 {
     private $model;
     private $userModel;
+    private $imageModel;
 
     function __construct()
     {
         $this->model = new commentModel();
         $this->userModel = new userModel();
+        $this->imageModel = new imageModel();
     }
 
     function addComment()
@@ -24,14 +27,19 @@ class commentController
         if (!$_SESSION['uid']) {
             return FALSE;
         }
-        // TODO: add timestamp check so no spam or smth...
         if (!$this->model->addComment($_POST['iid'], $_SESSION['uid'], $this->userModel->getUsername($_SESSION['uid']),
             preg_replace('/\s\s+/', ' ', $_POST['text'])))
             echo json_encode(array(
                 "success" => false));
-        else
-            echo json_encode(array(
-                "success" => true));
+        else {
+            if ($_SESSION['uid'] !== $$this->imageModel->getImageByIid($_POST['iid'])['uid']
+                && $this->userModel->getUserdata($_SESSION['uid'])['sendNotifications'] === 1) {
+                mail($this->userModel->getUserdata($_SESSION['uid'])['email'],
+                    "New comment",
+                    "You just got a new comment!! Go and check it out at " .
+                    $_SERVER['SERVER_PORT'] . "/src/views/view_image?iid=" . $_POST['iid']);
+            }
+        }
     }
 
     function getComments()

@@ -19,5 +19,6 @@
 <form action="/userController/logout" method="POST">
     <button type="submit" name="logoutbtn">Log out</button>
 </form>
+<button onclick="pop_up('/index.php/userSettings')">User settings</button>
 </body>
 </html>

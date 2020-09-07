@@ -104,6 +104,8 @@ class imageController
         return ($this->model->getImagesByUser($uid));
     }
 
+
+
     public function displayImageByIid($iid)
     {
         return $this->model->getImageByIid($iid);

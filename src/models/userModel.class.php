@@ -105,15 +105,20 @@ class userModel
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE uid=?");
         $stmt->execute([$uid]);
         if ($dataArray = $stmt->fetchAll(PDO::FETCH_ASSOC))
-            return $dataArray;
+            return $dataArray[0];
         return FALSE;
     }
 
     public function changeLoginDetail($uid, $newValue, $columnName)
     {
-        echo "UPDATE users SET $columnName = $newValue WHERE uid = $uid";
         try {
-            $stmt = $this->pdo->prepare("UPDATE users SET $columnName = ? WHERE uid = ?");
+            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE '$newValue' LIKE '$columnName'");
+            $stmt->execute();
+            if ($stmt->fetch()) {
+                print_r($stmt->fetch());
+                return FALSE;
+            }
+            $stmt = $this->pdo->prepare("UPDATE users SET $columnName=? WHERE uid=?");
             $stmt->execute([$newValue, $uid]);
         } catch (PDOException $e) {
             echo "Error!: " . $e->getMessage();
@@ -144,8 +149,7 @@ class userModel
             echo "Wrong password" . PHP_EOL;
             return FALSE;
         }
-        $this->changeLoginDetail($uid, $newUserName, "username");
-        return TRUE;
+        return $this->changeLoginDetail($uid, $newUserName, "username");
     }
 
     public function changeEmail($uid, $password, $newEmail)

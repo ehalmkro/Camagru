@@ -48,6 +48,12 @@ switch ($controller) {
         break;
     }
 
+    case 'userSettings':
+    {
+        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_settings.php';
+        break;
+    }
+
 
     default:
         if (isset($_SESSION['uid']))
