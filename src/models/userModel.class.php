@@ -33,30 +33,62 @@ class userModel
             echo "Wrong email format" . PHP_EOL;
             return FALSE;
         }
-        $confirmationCode= bin2hex(random_bytes(32));
+        $confirmationCode = bin2hex(random_bytes(32));
         $password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->pdo->prepare("INSERT INTO 
+        try {
+            $stmt = $this->pdo->prepare("INSERT INTO 
 									users (username, password, email, confirmationCode) 
 									VALUES (:username, :password, :email, :confirmationCode);");
-
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':confirmationCode', $confirmationCode);
-        $stmt->execute(); //TODO: ADD TRY
-        //echo "Added user " . $username . PHP_EOL;
-        return (TRUE);
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':password', $password);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':confirmationCode', $confirmationCode);
+            $stmt->execute();
+            return TRUE;
+        } catch (PDOException $e) {
+            return FALSE;
+        }
     }
+
+    public function renewConfirmationCode($oldConfirmationCode)
+    {
+        try {
+            $newConfirmationCode = bin2hex(random_bytes(32));
+            $stmt = $this->pdo->prepare("UPDATE users SET confirmationCode=? WHERE confirmationCode=?");
+            $stmt->execute([$newConfirmationCode, $oldConfirmationCode]);
+            return TRUE;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return FALSE;
+        }
+    }
+
+    public function verifyAccount($confirmationCode)
+    {
+        try {
+            $stmt = $this->pdo->prepare("UPDATE users SET verifiedAccount=1 WHERE confirmationCode=?");
+            $stmt->execute([$confirmationCode]);
+            return $this->renewConfirmationCode($confirmationCode);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return FALSE;
+        }
+    }
+
 
     public function auth($username, $password)
     {
-        $stmt = $this->pdo->prepare("SELECT password, uid
+        try {
+            $stmt = $this->pdo->prepare("SELECT password, uid
                             FROM users WHERE username=?");
-        $stmt->execute([$username]);
-        if ($hash = $stmt->fetch()) {
-            if (password_verify($password, $hash['password'])) {
-                return $hash['uid'];
+            $stmt->execute([$username]);
+            if ($hash = $stmt->fetch()) {
+                if (password_verify($password, $hash['password'])) {
+                    return $hash['uid'];
+                }
             }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
         return false;
     }
@@ -64,7 +96,7 @@ class userModel
     public function login($username, $password)
     {
         $uid = $this->auth($username, $password);
-        if ($uid === FALSE)
+        if ($uid === FALSE || $this->getUserdata($uid)['verifiedAccount'] == 0)
             return FALSE;
         return $uid;
     }
@@ -115,14 +147,11 @@ class userModel
             $stmt = $this->pdo->prepare("SELECT * FROM users WHERE '$newValue' LIKE '$columnName'");
             $stmt->execute();
             if ($stmt->fetch()) {
-                print_r($stmt->fetch());
                 return FALSE;
             }
             $stmt = $this->pdo->prepare("UPDATE users SET $columnName=? WHERE uid=?");
             $stmt->execute([$newValue, $uid]);
         } catch (PDOException $e) {
-            echo "Error!: " . $e->getMessage();
-            $this->errors[] = $e->getMessage();
             return FALSE;
         }
         return TRUE;
@@ -141,6 +170,17 @@ class userModel
         $hash = password_hash($newPass, PASSWORD_DEFAULT);
         $this->changeLoginDetail($uid, $hash, "password");
         return TRUE;
+    }
+
+    public function changeNotificationPreference($uid, $notificationPreference)
+    {
+        try {
+            $stmt = $this->pdo->prepare("UPDATE users SET sendNotifications=? WHERE uid=?");
+            $stmt->execute([$notificationPreference, $uid]);
+            return TRUE;
+        } catch (PDOException $e){
+            return FALSE;
+        }
     }
 
     public function changeUserName($uid, $password, $newUserName)

@@ -24,7 +24,8 @@ try {
 	password VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL,
     confirmationCode VARCHAR(255),
-    sendNotifications TINYINT(1) DEFAULT 1);';
+    sendNotifications TINYINT(1) DEFAULT 1,
+    verifiedAccount TINYINT(1) DEFAULT 0);';
     $pdo->exec($users);
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage() . PHP_EOL;

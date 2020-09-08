@@ -79,11 +79,25 @@ class userController
         $password = password_hash($_POST['newPass'], PASSWORD_DEFAULT);
         if (($this->model->changeLoginDetail($userdata['uid'], $password,
                 "password") === TRUE)) {
-            $this->model->changeLoginDetail($userdata['uid'], bin2hex(random_bytes(32)), "confirmationCode"); //TODO: move to model?
+            $this->renewConfirmationCode($userdata['confirmationCode']);
             $this->logout();
-        }
-        else
+        } else
             echo "Error!";
+    }
+
+    public function verifyAccount()
+    {
+        if (!isset($_GET['confirmationCode']) || !$this->model->verifyAccount($_GET['confirmationCode']))
+            echo "Error!";
+        else {
+            $this->model->verifyAccount($_GET['confirmationCode']);
+            $this->redirect("/index.php?status=accountVerified");
+        }
+    }
+
+    private function renewConfirmationCode($oldConfirmationCode)
+    {
+        return $this->model->renewConfirmationCode($oldConfirmationCode);
     }
 
     public function signUp()
@@ -94,9 +108,13 @@ class userController
             $email = $_POST['email'];
             if ($this->model->signUp($username, $password, $email)) {
                 $user = $this->model->auth($username, $password);
-                $_SESSION['uid'] = $user;
-                // include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
-                $this->redirect('/index.php');
+                $userData = $this->getUserData($user);
+                mail($userData['email'],
+                    "Verify your account",
+                    "Welcome to C A M A G R U, verify your account at: " . "http://" .
+                    $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] .
+                    "/userController/verifyAccount?confirmationCode=" . $userData['confirmationCode']);
+                $this->redirect('/index.php?status=mailSent');
             }
         }
 
@@ -110,10 +128,10 @@ class userController
             else
                 echo "Error!";
     }
+
     public function changeEmail()
     {
-        if (isset($_SESSION['uid']) && isset($_POST['newEmail']))
-        {
+        if (isset($_SESSION['uid']) && isset($_POST['newEmail'])) {
             if ($this->model->changeEmail($_SESSION['uid'], $_POST['password'], $_POST['newEmail']))
                 $this->redirect("/index.php/userSettings");
             else
@@ -121,6 +139,8 @@ class userController
 
         }
     }
+
+// TODO: change password
 
     public function login()
     {
@@ -130,15 +150,27 @@ class userController
             $username = $_POST['username'];
             $password = $_POST['password'];
             $uid = $this->model->login($username, $password);
-            if ($uid) {
+            if ($uid != FALSE) {
                 $_SESSION['uid'] = $uid;
-                /*$user = $this->model->getUsername($uid);
-                include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_profile.php';
-            */
                 $this->redirect('/index.php');
             }
-        } else
-            echo "Wrong username / password" . PHP_EOL;
+            else
+                $this->redirect('/index.php?status=loginFailed');
+        }
+    }
+
+    public function changeNotificationPreference()
+    {
+        if (!$this->model->changeNotificationPreference($_SESSION['uid'], $_POST['notificationPreference']))
+            echo json_encode(array(
+                "status" => "fail",
+                "error" => true,
+                "message" => "Couldn't change notification preference"));
+        else
+            echo json_encode(array(
+                "status" => "success",
+                "error" => false,
+                "message" => "Changed preference"));;
     }
 
     public function logout()
