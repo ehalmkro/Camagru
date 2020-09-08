@@ -6,40 +6,35 @@ const cancelButton = document.getElementById("cancelButton");
 const selectFileButton = document.getElementById("selectFileButton");
 const previewFileButton = document.getElementById("previewFileButton");
 const fileInput = document.getElementById("fileInput");
-const img = document.getElementById('photo');
-const container = document.getElementById('webcamContainer');
 let previewPic;
 
 
 let stickerArray = [];
 
-const canvas = document.createElement("canvas");
+const canvas = document.getElementById("canvas");
 canvas.setAttribute('width', "640");
 canvas.setAttribute('height', "480");
 const ctx = canvas.getContext("2d");
 canvas.style.display = "none";
 
-container.insertBefore(canvas, img);
 let photoBlob;
 
-const elementList = document.querySelectorAll("input");
+const elementList = document.querySelectorAll("input"); // TODO: remove file upload input from this
 
 for (let i = 0; i < elementList.length; i++)
-    elementList[i].addEventListener("change", e => {
-        if (e.target.checked)
-            addSticker(elementList[i].id);
-        else
-            removeSticker(elementList[i].id);
-    }, false);
-
-selectFileButton.addEventListener("click", selectFile, false);
-uploadButton.addEventListener("click", uploadImage, false);
-cancelButton.addEventListener("click", cancelImage, false);
+        elementList[i].addEventListener("change", e => {
+            if (e.target.checked)
+                addSticker(elementList[i].id);
+            else
+                removeSticker(elementList[i].id);
+        }, false);
+    selectFileButton.addEventListener("click", selectFile, false);
+    uploadButton.addEventListener("click", uploadImage, false);
+    cancelButton.addEventListener("click", cancelImage, false);
 
 function drawImage() {
-
     ctx.clearRect(0, 0, 0, 0);
-    ctx.drawImage(previewPic, 0, 0);
+    ctx.drawImage(previewPic, 0, 0, 640, 480);
     let sticker = [];
     for (let i = 0; i < stickerArray.length; i++) {
         sticker[i] = new Image();
@@ -47,10 +42,11 @@ function drawImage() {
         sticker[i].src = previewSource.replace(".png", "_filter.png");
         ctx.drawImage(sticker[i], 0, 0, 640, 480);
     }
-
 }
 
 function addSticker(id) {
+
+    ctx.clearRect(0, 0, 0, 0);
     ctx.drawImage(previewPic, 0, 0);
     let previewSource = document.getElementById(id + "img").src;
     let filename = previewSource.replace(".png", "_filter.png");
@@ -94,10 +90,10 @@ const upload = (file) => {
 };
 
 
-function selectFile() { // TODO: MOVE THIS TO CANVAS TO GET RID OF img completely
+function selectFile() {
+
     hideElements(selectFileButton, captureButton, video); // TODO: PAUSE VIDEO PROPERLY
-    showElements(previewFileButton, fileInput, img);
-    img.style.visibility = 'hidden';
+    showElements(previewFileButton, fileInput);
     previewFileButton.addEventListener("click", res => {
         const selectedFile = document.getElementById("fileInput").files[0];
         if (selectedFile === undefined || selectedFile.size > 5120000 ||
@@ -105,18 +101,17 @@ function selectFile() { // TODO: MOVE THIS TO CANVAS TO GET RID OF img completel
             console.log(selectedFile.type);
             alert("Invalid file!");
         } else {
-            let reader = new FileReader();
-            reader.readAsDataURL(selectedFile);
-            let image = new Image();
-            image.src = selectedFile;
-            img.style.visibility = 'visible';
-            reader.addEventListener("load", function () {
-                // convert image file to base64 string
-                img.src = reader.result;
-                photoBlob = selectedFile;
-                showElements(uploadButton);
-            }, false);
-            reader.readAsDataURL(selectedFile);
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+              previewPic = new Image();
+              previewPic.onload = () => {
+                drawImage();
+              };
+              previewPic.src = ev.target.result;
+          };
+          photoBlob = selectedFile;
+          reader.readAsDataURL(selectedFile);
+          showElements(canvas, uploadButton);
         }
     });
 }
@@ -142,7 +137,7 @@ function cancelImage() {
 function takePicture(mediaStreamTrack, imageCapture) {
     imageCapture.takePhoto()
         .then(blob => {
-            hideElements(video, captureButton, selectFileButton, img);
+            hideElements(video, captureButton, selectFileButton);
             showElements(uploadButton, canvas);
             photoBlob = blob;
             previewPic = new Image();
@@ -152,7 +147,7 @@ function takePicture(mediaStreamTrack, imageCapture) {
             showElements(retakeButton);
             retakeButton.addEventListener('click', function (ev) {
                 ev.preventDefault();
-                hideElements(img, uploadButton, retakeButton);
+                hideElements(uploadButton, retakeButton, canvas);
                 showElements(video, captureButton, selectFileButton);
             }, false);
         })
@@ -172,15 +167,22 @@ function gotMedia(mediaStream) {
 
 function noWebcam() {
     hideElements(video, captureButton);
-    showElements(img);
-    img.src = "/public/img/resources/noWebcam.png";
+    showElements(canvas);
+    previewPic = new Image();
+    previewPic.onload = () => {
+        drawImage();
+    };
+    previewPic.src = "/public/img/resources/noWebcam.png";
 }
 
 if (navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({  video: {
-            width: { exact: 640 },
-            height: { exact: 480 } } }
-        )
+    navigator.mediaDevices.getUserMedia({
+            video: {
+                width: {exact: 640},
+                height: {exact: 480}
+            }
+        }
+    )
         .then(gotMedia)
         .catch(function (err) {
             noWebcam();

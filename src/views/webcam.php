@@ -10,6 +10,7 @@ header("Location: /index.php"); ?>
 <body>
     <div id="webcamContainer">
         <video width="800" autoplay="true" id="videoElement"></video>
+        <canvas id="canvas"></canvas>
         <img src="" id="photo" alt="The screen capture will appear in this box.">
         <div class = "toolBar">
             <button class="webcamButton" id="captureButton">Take photo</button>
