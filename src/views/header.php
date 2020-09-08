@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <html>
 <head>
     <title>camagru || ehalmkro</title>
@@ -16,9 +18,14 @@
 </head>
 <body>
 <button onclick="pop_up('/index.php/takePicture')">Take picture w/ webcam</button>
+<? if (isset($_SESSION['uid'])): ?>
 <form action="/userController/logout" method="POST">
     <button type="submit" name="logoutbtn">Log out</button>
 </form>
-<button onclick="pop_up('/index.php/userSettings')">User settings</button>
+    <? else: ?>
+    <button onclick="pop_up('/index.php/login')">Log in</button>
+<? endif; ?>
+
+    <button onclick="pop_up('/index.php/userSettings')">User settings</button>
 </body>
 </html>

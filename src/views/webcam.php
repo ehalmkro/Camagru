@@ -1,4 +1,4 @@
-<? if (!$_SESSION['uid'])
+<? if (!$_SESSION['uid']) // TODO: add previous images too this view!
 header("Location: /index.php"); ?>
 
 <html>

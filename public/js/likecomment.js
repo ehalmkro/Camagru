@@ -109,7 +109,7 @@ function addComment() {
         mode: "same-origin",
         credentials: "same-origin",
         body: data
-    }).then(response => response.json()
+    }).then(response => response.text()
     ).then(
         success => {
             alert("Comment added");
@@ -146,7 +146,7 @@ function getLikes() {
 }
 
 
-function addLike() {        //TODO: ADD JSON RETURN ARRAY
+function addLike() {
     let data = new FormData();
     data.append('iid', this.id.split(".")[1]);
     fetch('/index.php/commentController/addLike', {
@@ -154,7 +154,7 @@ function addLike() {        //TODO: ADD JSON RETURN ARRAY
         mode: "same-origin",
         credentials: "same-origin",
         body: data
-    }).then(res => res.text())          // convert to plain text
+    }).then(res => res.text());          // convert to plain text
     getLikes();
     listenLikeButtons();
     /*    }).then(response => response.json()

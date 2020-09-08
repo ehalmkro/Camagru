@@ -92,7 +92,7 @@ const upload = (file) => {
 
 function selectFile() {
 
-    hideElements(selectFileButton, captureButton, video); // TODO: PAUSE VIDEO PROPERLY
+    hideElements(selectFileButton, captureButton, video);
     showElements(previewFileButton, fileInput);
     previewFileButton.addEventListener("click", res => {
         const selectedFile = document.getElementById("fileInput").files[0];
@@ -126,7 +126,6 @@ function uploadImage() {
     };
     window.opener.location.reload();
     window.close();
-    // TODO: back to default view after this
 }
 
 function cancelImage() {

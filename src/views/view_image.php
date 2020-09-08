@@ -26,7 +26,7 @@ $imageArray = $imageController->displayImageByIid($iid);
     <link rel="stylesheet" href="/public/css/style.css">
 </HEAD>
 <BODY>
-<a href="/src/views/gallery.php/?page=<? echo $fromPage ?>">Back to gallery</a>
+<a href="/src/views/gallery.php?page=<? echo $fromPage ?>">Back to gallery</a>
 <div class="imageDisplay">
     <? if (empty($imageArray)): ?>
         <p>Nothing here!</p>
