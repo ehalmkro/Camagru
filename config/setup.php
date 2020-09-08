@@ -23,8 +23,8 @@ try {
 	username VARCHAR(40) NOT NULL,
 	password VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL,
-    confirmationCode VARCHAR(255))
-    sendNotifications TINYINT(1) DEFAULT 1';
+    confirmationCode VARCHAR(255),
+    sendNotifications TINYINT(1) DEFAULT 1);';
     $pdo->exec($users);
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage() . PHP_EOL;
