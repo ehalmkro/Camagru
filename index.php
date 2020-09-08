@@ -28,14 +28,22 @@ switch ($controller) {
         break;
     }
 
-    case 'takePicture': // TODO: add checks for user login
+    case 'takePicture':
     {
+        if (!isset($_SESSION['uid'])) {
+            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/login.php';
+            break;
+        }
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/webcam.php';
         break;
     }
 
     case 'viewImage':
     {
+        if (!isset($_SESSION['uid'])) {
+            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/login.php';
+            break;
+        }
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/view_image.php';
         break;
     }
@@ -54,10 +62,15 @@ switch ($controller) {
         break;
     }
 
+    case 'login':
+    {
+        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/login.php';
+        break;
+    }
 
     default:
-        if (isset($_SESSION['uid']))
+     //   if (isset($_SESSION['uid']))
             include $_SERVER['DOCUMENT_ROOT'] . '/src/views/gallery.php';
-        else
-            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
+      //  else
+        //    include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
 }
