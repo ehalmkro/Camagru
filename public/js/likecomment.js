@@ -1,8 +1,8 @@
 const likeButton = document.getElementsByClassName("likeButton");
 const likeCounter = document.getElementsByClassName("likeCounter");
-const commentField = document.getElementsByClassName("commentField");
+document.getElementsByClassName("commentField");
 const commentButton = document.getElementsByClassName("commentButton");
-const comments = document.getElementsByClassName("comments")
+const comments = document.getElementsByClassName("comments");
 
 listenCommentButton();
 listenLikeButtons();
@@ -36,7 +36,7 @@ function listenLikeButtons() {
 }
 
 
-
+// noinspection JSUnusedLocalSymbols,JSUnusedLocalSymbols
 function printComments(item, index, array) {
     let iid = item['iid'];
     let newDiv = document.createElement("div");
@@ -53,6 +53,7 @@ function printComments(item, index, array) {
         deleteButton.innerText = "delete comment";
         deleteButton.className = "deleteButton ml-5 text-danger border";
         newDiv.appendChild(deleteButton);
+        // noinspection JSUnusedLocalSymbols
         deleteButton.addEventListener("click", res => deleteComment(item['cid']));
     }
 }
@@ -63,6 +64,7 @@ function deleteComment(cid){
     let data = new FormData();
     data.append('uid', sessionUid);
     data.append('cid', cid);
+    // noinspection JSUnusedLocalSymbols
     fetch('/index.php/commentController/removeComment', {
         method: "POST",
         mode: "same-origin",

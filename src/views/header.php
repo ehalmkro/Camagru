@@ -16,6 +16,7 @@
 <body>
 
 <div class="col-md bg-secondary border rounded text-center">
+    <!--suppress CheckImageSize -->
     <img src="/public/img/resources/logo.png" width="30%" class="img-fluid mw-40"/>
     <div>
         <? if (isset($_SESSION['uid'])): { ?>
@@ -23,6 +24,7 @@
             <button class="btn-primary" onclick="pop_up('/index.php/takePicture', 900, 720)">Take picture w/ webcam
             </button>
             <button class="btn-primary" onclick="pop_up('/index.php/userSettings', 640, 510)">User settings</button>
+            <!--suppress HtmlUnknownTarget, HtmlUnknownTarget -->
             <form action="/userController/logout" class="text-right" method="POST">
                 <button class="btn-dark text-right" type="submit" name="logoutbtn">Log out</button>
             </form>

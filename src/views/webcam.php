@@ -27,29 +27,29 @@ $image_array = $imageController->displayImageByUser($_SESSION['uid']);
                 <button class="webcamButton btn-primary" id="cancelButton">Close</button>
             </div>
         </div>
-        <div class="col border" height="10%">
+        <div class="col border">
             <? if (!empty($image_array)) : ?>
                <? foreach ($image_array as $k => $innerArray): ?>
                     <img alt="user image" width="150px"
                          src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/>
                 <? endforeach; ?>
             <? else:  ?>
-            <p>No previous pictures, add some to admire them here!</p>
+            <p class="text-center">No previous pictures, add some to admire them here!</p>
             <? endif; ?>
         </div>
     </div>
     <div class="row toolBar d-flex justify-content-center" id="stickerBar">
         <ul>
-            <li><input type="checkbox" id="cb1"/>
+            <li><input name="sticker" type="checkbox" id="cb1"/>
                 <label for="cb1"><img id="cb1img" src="/public/img/stickers/poop.png"/></label>
             </li>
-            <li><input type="checkbox" id="cb2"/>
+            <li><input name="sticker" type="checkbox" id="cb2"/>
                 <label for="cb2"><img id="cb2img" src="/public/img/stickers/hat.png"/></label>
             </li>
-            <li><input type="checkbox" id="cb3"/>
+            <li><input name="sticker" type="checkbox" id="cb3"/>
                 <label for="cb3"><img id="cb3img" src="/public/img/stickers/hive.png"/></label>
             </li>
-            <li><input type="checkbox" id="cb4"/>
+            <li><input name="sticker" type="checkbox" id="cb4"/>
                 <label for="cb4"><img id="cb4img" src="/public/img/stickers/tornio.png"/></label>
             </li>
         </ul>

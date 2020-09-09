@@ -142,7 +142,7 @@ class userController
         }
         $this->model->changePassword($_SESSION['uid'], $_POST['newPass'], $_POST['oldPass']);
         echo "Password changed!";
-        $this->logout();
+        session_destroy();
     }
 
     public function login()
@@ -173,7 +173,7 @@ class userController
             echo json_encode(array(
                 "status" => "success",
                 "error" => false,
-                "message" => "Changed preference"));;
+                "message" => "Changed preference"));
     }
 
     public function logout()

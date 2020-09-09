@@ -14,7 +14,7 @@ class commentModel
         $this->pdo = $core->pdo;
     }
 
-    public function addComment($iid, $uid, $username, $comment) // TODO: add comment email and toggle for notifications
+    public function addComment($iid, $uid, $username, $comment)
     {
         try {
             $stmt = $this->pdo->prepare('INSERT INTO 

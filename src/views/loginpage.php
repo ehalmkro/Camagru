@@ -5,20 +5,23 @@
 </head>
 <div class="container col-md bg-light border p-4 m-3 rounded">
     Log in
+    <!--suppress HtmlUnknownTarget, HtmlUnknownTarget -->
     <form action="/userController/login" method="POST">
         <input type="text" name="username" placeholder="enter username" required>
         <input type="password" name="password" placeholder="enter password" required>
         <button class="btn-sm btn-primary" type="submit" name="loginbtn">Log in</button>
     </form>
     Sign up
+    <!--suppress HtmlUnknownTarget, HtmlUnknownTarget -->
     <form action="/userController/signUp" method="POST">
         <input type="text" name="username" placeholder="enter username" required>
         <input type="password" name="password" placeholder="enter password" required>
         <input type="password" name="password2" placeholder="enter password again" required>
         <input type="email" name="email" placeholder="enter email" required>
-        <button class="btn-sm btn-primary" type="submit" name="signupbtn">Sign up</button>
-    </form>
+        <button class="btn-sm btn-primary" type="submit" name="s
     Reset password
+    <!--suppress HtmlUnknownTarget, HtmlUnknownTarget -->
+    !--suppress HtmlUnknownTarget -->
     <form action="/userController/sendResetMail" method="POST">
         <input type="text" name="username" placeholder="enter username" required>
         <button class="btn-sm btn-primary" type="submit" name="resetbtn">Reset</button>

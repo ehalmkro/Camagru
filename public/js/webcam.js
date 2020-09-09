@@ -19,10 +19,11 @@ canvas.style.display = "none";
 
 let photoBlob;
 
-const elementList = document.querySelectorAll("input"); // TODO: remove file upload input from this
+const elementList = document.querySelectorAll('[name="sticker"]');
 
 for (let i = 0; i < elementList.length; i++)
         elementList[i].addEventListener("change", e => {
+            // noinspection JSUnresolvedVariable
             if (e.target.checked)
                 addSticker(elementList[i].id);
             else
@@ -107,6 +108,7 @@ function selectFile() {
               previewPic.onload = () => {
                 drawImage();
               };
+              // noinspection JSValidateTypes
               previewPic.src = ev.target.result;
           };
           photoBlob = selectedFile;
@@ -134,6 +136,7 @@ function cancelImage() {
 
 
 function takePicture(mediaStreamTrack, imageCapture) {
+    // noinspection JSUnresolvedFunction
     imageCapture.takePhoto()
         .then(blob => {
             hideElements(video, captureButton, selectFileButton);
@@ -141,6 +144,7 @@ function takePicture(mediaStreamTrack, imageCapture) {
             photoBlob = blob;
             previewPic = new Image();
             previewPic.src = URL.createObjectURL(blob);
+            // noinspection JSCheckFunctionSignatures
             ctx.drawImage(video, 0, 0);
             drawImage();
             showElements(retakeButton);
@@ -157,6 +161,7 @@ function gotMedia(mediaStream) {
     video.srcObject = mediaStream;
     video.play();
     const mediaStreamTrack = mediaStream.getVideoTracks()[0];
+    // noinspection JSUnresolvedFunction
     const imageCapture = new ImageCapture(mediaStreamTrack);
     captureButton.addEventListener('click', function (ev) {
         ev.preventDefault();

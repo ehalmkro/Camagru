@@ -33,6 +33,7 @@ $image_array = $imageController->displayImageByUser(NULL);
         <? else: { ?>
             <? foreach ($image_array as $k => $innerArray): ?>
                 <div class="galleryImage col-md bg-light border p-4 m-3 rounded">
+                    <!--suppress HtmlUnknownTarget -->
                     <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>"><img
                                 alt="user image" id="userImage" class="rounded mx-auto d-block"
                                 src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/></a>
@@ -42,6 +43,7 @@ $image_array = $imageController->displayImageByUser(NULL);
                     <div class="commentBar d-flex justify-content-between p-5">
                         <button class="likeButton btn-sm btn-primary" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
                         <p class="likeCounter d-flex justify-content-between" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
+                        <!--suppress HtmlUnknownTarget -->
                         <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>" class="commentCounter d-flex justify-content-between"
                            id="commentCounter.<? echo $innerArray['iid'] ?>"><? echo $commentController->getCommentCount($innerArray['iid']); ?>
                             comment(s)</a>
@@ -54,7 +56,7 @@ $image_array = $imageController->displayImageByUser(NULL);
         <a href="/src/views/gallery.php/?page=<? echo $imageController->getPage() - 1 ?>"
            class="button">Previous page</a>
     <? endif; ?>
-    <? if (!$imageController->model->lastPage): // TODO: USER GETTER FOR THIS ?>
+    <? if (!$imageController->model->lastPage): ?>
         <a href="/src/views/gallery.php/?page=<? echo $imageController->getPage() + 1 ?>" class="button">Next page</a>
     <? endif; ?>
 

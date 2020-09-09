@@ -23,7 +23,7 @@ class imageModel
         $this->perPage = 5;
     }
 
-    public function addImage($uid, $file) // TODO: add checks for image type etc
+    public function addImage($uid, $file)
     {
         $filename = uniqid("img_");
         if (strlen($file) > 5120000 || !strlen($file)) {
@@ -45,11 +45,12 @@ class imageModel
     public function getImagesByUser($uid)
     {
         $limit = $this->page * $this->perPage;
+        try{
         if (empty($uid))
             $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM images");
         else
             $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM images WHERE uid = ?");
-        empty($uid) ? $stmt->execute() : $stmt->execute([$uid]); // TODO: ADD TRY CATCH
+        empty($uid) ? $stmt->execute() : $stmt->execute([$uid]);
         $queryData = $stmt->fetch();
         $this->numRows = $queryData[0];
         if ($this->numRows <= 0) {
@@ -65,8 +66,11 @@ class imageModel
         empty($uid) ? $stmt->execute() : $stmt->execute([$uid]);
         $this->dataArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
-
         return $this->dataArray;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return FALSE;
+        }
     }
 
     public function getImageByIid($iid)

@@ -34,7 +34,7 @@ $imageArray = $imageController->displayImageByIid($iid);
         <img id="viewImage" alt="Picture" class="rounded mx-auto d-block"
              src='/public/img/uploads/<? echo $imageArray['imageHash'] . '.jpg' ?>'
              title="<? echo $userController->returnUserName($imageArray['uid']) ?> at <? echo $imageArray['date'] ?> "/>
-        <a/>
+        </a>
         <? if ($_SESSION['uid'] === $imageArray['uid']): ?>
             <button class="btn-secondary btn-sm" onclick="deleteImage()">Delete</button>
         <? endif; ?>
@@ -50,6 +50,7 @@ $imageArray = $imageController->displayImageByIid($iid);
         <button class="commentButton btn-sm btn-primary " id="commentButton.<? echo $imageArray['iid'] ?>">Send</button>
         <? endif; ?>
 </div>
+<!--suppress JSUnusedLocalSymbols -->
 <script type="text/javascript">
     let sessionUid = "<? echo $_SESSION['uid']?>";
     let iid = "<? echo $imageArray['iid']?>";

@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../../public/css/style.css">
 </head>
 Change password
+<!--suppress HtmlUnknownTarget, HtmlUnknownTarget -->
 <form action="/userController/resetPassword" method="POST">
     <input type="password" name="newPass" placeholder="enter new password" required>
     <input type="password" name="newPass2" placeholder="enter new password" required>
