@@ -56,6 +56,11 @@ switch ($controller) {
         break;
     }
 
+    case 'forgotPassword':
+    {
+        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/forgot_password.php';
+        break;
+    }
     case 'userSettings':
     {
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/user_settings.php';
@@ -64,7 +69,7 @@ switch ($controller) {
 
     case 'login':
     {
-        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/login.php';
+        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/loginpage.php';
         break;
     }
 

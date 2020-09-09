@@ -17,15 +17,15 @@
 
 </head>
 <body>
-<button onclick="pop_up('/index.php/takePicture')">Take picture w/ webcam</button>
-<? if (isset($_SESSION['uid'])): ?>
-<form action="/userController/logout" method="POST">
-    <button type="submit" name="logoutbtn">Log out</button>
-</form>
-    <? else: ?>
-    <button onclick="pop_up('/index.php/login')">Log in</button>
-<? endif; ?>
-
+<? if (isset($_SESSION['uid'])): { ?>
+    <form action="/userController/logout" method="POST">
+        <button type="submit" name="logoutbtn">Log out</button>
+    </form>
+    <button onclick="pop_up('/index.php/takePicture')">Take picture w/ webcam</button>
     <button onclick="pop_up('/index.php/userSettings')">User settings</button>
+<? } else: { ?>
+    <button onclick="pop_up('/index.php/login')">Log in / sign up / reset password</button>
+<? } endif; ?>
+
 </body>
 </html>
