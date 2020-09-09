@@ -25,26 +25,26 @@ $image_array = $imageController->displayImageByUser(NULL);
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
               integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX"
               crossorigin="anonymous">
-        <link rel="stylesheet" href="/public/css/style.css">
     </HEAD>
     <BODY>
-    <div class="gallery">
+    <div class="container">
         <? if (empty($image_array)): ?>
             <p>Seems to be a bit empty here, why don't you add some stuff?</p>
         <? else: { ?>
             <? foreach ($image_array as $k => $innerArray): ?>
-                <div class="galleryImage">
+                <div class="galleryImage col-md bg-light border p-4 m-3 rounded">
                     <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>"><img
-                                id="userImage"
+                                alt="user image" id="userImage" class="rounded mx-auto d-block"
                                 src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/></a>
-                    <p> by user <? echo $userController->returnUserName($innerArray['uid']) ?>
+                    <p class="text-center"> by user <? echo $userController->returnUserName($innerArray['uid']) ?>
                         at <? echo $innerArray['date'] ?> </p>
-                    <button class="likeButton" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
-                    <div class="commentBar">
-                        <p class="likeCounter" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
-                        <p class="commentCounter"
+
+                    <div class="commentBar d-flex justify-content-between p-5">
+                        <button class="likeButton btn-sm btn-primary" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
+                        <p class="likeCounter d-flex justify-content-between" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
+                        <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>" class="commentCounter d-flex justify-content-between"
                            id="commentCounter.<? echo $innerArray['iid'] ?>"><? echo $commentController->getCommentCount($innerArray['iid']); ?>
-                            comment(s)</p>
+                            comment(s)</a>
                     </div>
                 </div>
             <? endforeach;

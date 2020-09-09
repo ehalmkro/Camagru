@@ -23,30 +23,32 @@ $imageArray = $imageController->displayImageByIid($iid);
 <HEAD>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
           integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
-    <link rel="stylesheet" href="/public/css/style.css">
 </HEAD>
 <BODY>
 <a href="/src/views/gallery.php?page=<? echo $fromPage ?>">Back to gallery</a>
-<div class="imageDisplay">
+<div class="imageDisplay galleryImage col-md bg-light border p-4 m-3 rounded">
     <? if (empty($imageArray)): ?>
         <p>Nothing here!</p>
     <? else: ?>
-        <img id="viewImage" alt="Picture"
+    <a href="/src/views/gallery.php?page=<? echo $fromPage ?>">
+        <img id="viewImage" alt="Picture" class="rounded mx-auto d-block"
              src='/public/img/uploads/<? echo $imageArray['imageHash'] . '.jpg' ?>'
              title="<? echo $userController->returnUserName($imageArray['uid']) ?> at <? echo $imageArray['date'] ?> "/>
+        <a/>
         <? if ($_SESSION['uid'] === $imageArray['uid']): ?>
-            <button onclick="deleteImage()">Delete</button>
+            <button class="btn-secondary btn-sm" onclick="deleteImage()">Delete</button>
         <? endif; ?>
-        <button class="likeButton" id="likeButton.<? echo $imageArray['iid'] ?>"></button>
-        <div class="commentBar">
+        <button class="likeButton btn-primary btn-sm" id="likeButton.<? echo $imageArray['iid'] ?>"></button>
+        <div class="commentBar d-flex justify-content-between p-5">
             <p class="likeCounter" id="likeCounter.<? echo $imageArray['iid'] ?>"> like(s)</p>
             <p class="commentCounter" id="commentCounter.<? echo $imageArray['iid'] ?>"></p>
-            <div class="comments" id="comments.<? echo $imageArray['iid'] ?>"></div>
-            <input type="text" class="commentField" placeholder="Comment"
-                   id="commentField.<? echo $imageArray['iid'] ?>">
-            <button class="commentButton" id="commentButton.<? echo $imageArray['iid'] ?>">Send</button>
+
         </div>
-    <? endif; ?>
+        <div class="comments text-center" id="comments.<? echo $imageArray['iid'] ?>"></div>
+        <input type="text" class="commentField w-75" placeholder="Comment"
+               id="commentField.<? echo $imageArray['iid'] ?>">
+        <button class="commentButton btn-sm btn-primary " id="commentButton.<? echo $imageArray['iid'] ?>">Send</button>
+        <? endif; ?>
 </div>
 <script type="text/javascript">
     let sessionUid = "<? echo $_SESSION['uid']?>";

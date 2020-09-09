@@ -41,7 +41,7 @@ function printComments(item, index, array) {
     let iid = item['iid'];
     let newDiv = document.createElement("div");
 
-   newDiv.className = "commentDiv";
+   newDiv.className = "commentDiv row w-50 p-2";
     let newContent = document.createElement("p");
     newContent.className ="commentText";
     let commentText = document.createTextNode(item['username'] + ": " + item['text']);
@@ -50,8 +50,8 @@ function printComments(item, index, array) {
     document.getElementById("comments." + iid).appendChild(newDiv);
     if (item['uid'] === sessionUid) {
         let deleteButton = document.createElement("p");
-        deleteButton.innerText = "X";
-        deleteButton.className = "deleteButton";
+        deleteButton.innerText = "delete comment";
+        deleteButton.className = "deleteButton ml-5 text-danger border";
         newDiv.appendChild(deleteButton);
         deleteButton.addEventListener("click", res => deleteComment(item['cid']));
     }

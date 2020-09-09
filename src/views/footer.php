@@ -1,1 +1,1 @@
-<p id="footerText"> ehalmkro <? echo date("Y"); ?></p>
+<p class="text-center text-muted"> ehalmkro <? echo date("Y"); ?></p>

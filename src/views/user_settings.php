@@ -38,42 +38,44 @@ if ($error) echo "Error!";
     </script>
 </HEAD>
 
+<div class="container col-md bg-light border p-4 m-3 rounded">
+    User settings:
+    <form action="/userController/changeUsername" method="POST">
+        Change username:<br>
+        <input type="text" name="newUsername" value="<? echo $userController->returnUserName($_SESSION['uid']) ?>">
+        <input type="password" name="password" placeholder="Insert password"/>
+        <button class="btn-sm btn-primary" type="submit" name="submit">Change username</button>
+    </form>
+    <form action="/userController/changeEmail" method="POST">
+        Change email:<br>
+        <input type="text" name="newEmail" value="<? echo($userController->getUserData($_SESSION['uid'])['email']) ?>">
+        <input type="password" name="password" placeholder="Insert password"/>
+        <button class="btn-sm btn-primary" type="submit" name="submit">Change email</button>
+    </form>
 
-<form action="/userController/changeUsername" method="POST">
-    Change username:<br>
-    <input type="text" name="newUsername" value="<? echo $userController->returnUserName($_SESSION['uid']) ?>">
-    <input type="password" name="password" placeholder="Insert password"/>
-    <button type="submit" name="submit">Change username</button>
-</form>
-<form action="/userController/changeEmail" method="POST">
-    Change email:<br>
-    <input type="text" name="newEmail" value="<? echo($userController->getUserData($_SESSION['uid'])['email']) ?>">
-    <input type="password" name="password" placeholder="Insert password"/>
-    <button type="submit" name="submit">Change email</button>
-</form>
+    <form action="/userController/changePassword" method="POST">
+        Change password:<br>
+        <input type="password" name="oldPass" placeholder="Insert old password"/>
+        <input type="password" name="newPass" placeholder="Insert new password"/>
+        <input type="password" name="newPass2" placeholder="Insert new password again"/>
+        <button class="btn-sm btn-primary" type="submit" name="submit">Change password</button>
+    </form>
 
-<form action="/userController/changePassword" method="POST">
-    Change password:<br>
-    <input type="password" name="oldPass" placeholder="Insert old password"/>
-    <input type="password" name="newPass" placeholder="Insert new password"/>
-    <input type="password" name="newPass2" placeholder="Insert new password again"/>
-    <button type="submit" name="submit">Change password</button>
-</form>
-
-<form action="/userController/changeNotificationPreference" method="POST">
-    Allow email notifications<br>
-    <label class="switch">
-        <input id="notificationCheck" type="checkbox" onchange="changeNotificationStatus();"
-            <? if (($userController->getUserData($_SESSION['uid'])['sendNotifications']) == 1): ?>
-                checked="checked"
-            <? endif; ?>
-        >
-        <span class="slider round">
+    <form action="/userController/changeNotificationPreference" method="POST">
+        Allow email notifications<br>
+        <label class="switch">
+            <input id="notificationCheck" type="checkbox" onchange="changeNotificationStatus();"
+                <? if (($userController->getUserData($_SESSION['uid'])['sendNotifications']) == 1): ?>
+                    checked="checked"
+                <? endif; ?>
+            >
+            <span class="slider round">
         </span>
-    </label>
-</form>
+        </label>
+    </form>
+</div>
 
-<button type="button" onclick="window.close()">Close</button>
+<button  class=btn-sm btn-primarytype="button" onclick="window.close()">Close</button>
 
 </body>
 </HTML>
