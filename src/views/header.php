@@ -22,7 +22,7 @@
 
             <button class="btn-primary" onclick="pop_up('/index.php/takePicture', 900, 720)">Take picture w/ webcam
             </button>
-            <button class="btn-primary" onclick="pop_up('/index.php/userSettings', 640, 480)">User settings</button>
+            <button class="btn-primary" onclick="pop_up('/index.php/userSettings', 640, 510)">User settings</button>
             <form action="/userController/logout" class="text-right" method="POST">
                 <button class="btn-dark text-right" type="submit" name="logoutbtn">Log out</button>
             </form>

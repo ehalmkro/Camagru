@@ -28,11 +28,14 @@ $image_array = $imageController->displayImageByUser($_SESSION['uid']);
             </div>
         </div>
         <div class="col border" height="10%">
-            <? if (!empty($image_array))
-                foreach ($image_array as $k => $innerArray): ?>
+            <? if (!empty($image_array)) : ?>
+               <? foreach ($image_array as $k => $innerArray): ?>
                     <img alt="user image" width="150px"
                          src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/>
                 <? endforeach; ?>
+            <? else:  ?>
+            <p>No previous pictures, add some to admire them here!</p>
+            <? endif; ?>
         </div>
     </div>
     <div class="row toolBar d-flex justify-content-center" id="stickerBar">
