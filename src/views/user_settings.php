@@ -54,8 +54,9 @@ if ($error) echo "Error!";
 
 <form action="/userController/changePassword" method="POST">
     Change password:<br>
-    <input type="password" name="oldPassword" placeholder="Insert old password"/>
-    <input type="password" name="newPassword" placeholder="Insert new password"/>
+    <input type="password" name="oldPass" placeholder="Insert old password"/>
+    <input type="password" name="newPass" placeholder="Insert new password"/>
+    <input type="password" name="newPass2" placeholder="Insert new password again"/>
     <button type="submit" name="submit">Change password</button>
 </form>
 

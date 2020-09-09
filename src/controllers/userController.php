@@ -133,7 +133,17 @@ class userController
         }
     }
 
-// TODO: change password
+    public function changePassword()
+    {
+        if (!isset($_POST['newPass'], $_POST['newPass2'], $_POST['oldPass'], $_SESSION['uid']) ||
+        $_POST['newPass'] !== $_POST['newPass2']) {
+            echo "Error!";
+            return;
+        }
+        $this->model->changePassword($_SESSION['uid'], $_POST['newPass'], $_POST['oldPass']);
+        echo "Password changed!";
+        $this->logout();
+    }
 
     public function login()
     {
