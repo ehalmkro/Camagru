@@ -56,7 +56,7 @@ $image_array = $imageController->displayImageByUser(NULL);
         <a href="/src/views/gallery.php/?page=<? echo $imageController->getPage() - 1 ?>"
            class="button">Previous page</a>
     <? endif; ?>
-    <? if (!$imageController->model->lastPage): ?>
+    <? if (!$imageController->model->lastPage && !empty($image_array)): ?>
         <a href="/src/views/gallery.php/?page=<? echo $imageController->getPage() + 1 ?>" class="button">Next page</a>
     <? endif; ?>
 

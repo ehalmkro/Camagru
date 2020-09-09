@@ -1,8 +1,12 @@
 <?PHP
 include('database.php');
 
+preg_match('/mysql:(.*?);/', $DB_DSN, $matches);
+$CREATE_DATABASE = str_replace($matches[1] . ";", "", $DB_DSN);
+$DATABASE_NAME = str_replace("dbname=", "", $matches[1]);
+
 try {
-    $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $pdo = new PDO($CREATE_DATABASE, $DB_USER, $DB_PASSWORD);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage() . PHP_EOL;
@@ -10,7 +14,7 @@ try {
 }
 
 try {
-    $sql = 'CREATE DATABASE IF NOT EXISTS camagru_db; USE camagru_db;';
+    $sql = 'CREATE DATABASE IF NOT EXISTS ' . $DATABASE_NAME . '; USE ' . $DATABASE_NAME . ';';
     $pdo->exec($sql);
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage() . PHP_EOL;
@@ -54,8 +58,10 @@ try {
     uid int NOT NULL,
     username VARCHAR(40))';
     $pdo->exec($comments);
-}   catch (PDOException $e) {
+} catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage() . PHP_EOL;
 }
 
-?>
+header("Location: /index.php");
+
+

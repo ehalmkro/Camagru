@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['setupDone'])) {
+    header("Location: /config/setup.php");
+    $_SESSION['setupDone'] = 1;
+}
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/userController.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/imageController.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/commentController.php';
@@ -31,7 +36,7 @@ switch ($controller) {
     case 'takePicture':
     {
         if (!isset($_SESSION['uid'])) {
-            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/login.php';
+            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/loginpage.php';
             break;
         }
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/webcam.php';
@@ -41,7 +46,7 @@ switch ($controller) {
     case 'viewImage':
     {
         if (!isset($_SESSION['uid'])) {
-            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/login.php';
+            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/loginpage.php';
             break;
         }
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/view_image.php';
@@ -74,8 +79,8 @@ switch ($controller) {
     }
 
     default:
-     //   if (isset($_SESSION['uid']))
-            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/gallery.php';
-      //  else
-        //    include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
+        //   if (isset($_SESSION['uid']))
+        include $_SERVER['DOCUMENT_ROOT'] . '/src/views/gallery.php';
+    //  else
+    //    include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
 }
