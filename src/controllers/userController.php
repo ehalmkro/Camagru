@@ -64,7 +64,7 @@ class userController
 
     public function resetPassword()
     {
-        $userdata = $this->model->getUserdata($_SESSION['uid'])[0];
+        $userdata = $this->model->getUserdata($_SESSION['uid']);
         if ($userdata['confirmationCode'] !== $_SESSION['confirmationCode'] || $_POST['newPass'] !== $_POST['newPass2']
             || !isset($_POST['passwordbtn'])) {
             echo "Error, try again!";
@@ -107,7 +107,7 @@ class userController
                     "Welcome to C A M A G R U, verify your account at: " . "http://" .
                     $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] .
                     "/userController/verifyAccount?confirmationCode=" . $userData['confirmationCode']);
-                $this->redirect('/index.php?status=mailSent');
+                echo "Registration complete! Check your inbox at " . $userData['email'] . " to validate your account.";
             }
         }
 

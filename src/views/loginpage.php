@@ -16,7 +16,7 @@
         <input type="password" name="password" placeholder="enter password" required>
         <input type="password" name="password2" placeholder="enter password again" required>
         <input type="email" name="email" placeholder="enter email" required>
-        <button class="btn-sm btn-primary" type="submit" name="submit">Sign up</button>
+        <button class="btn-sm btn-primary" type="submit" name="signupbtn">Sign up</button>
     </form>
     Reset password <br>
     <form action="/userController/sendResetMail" method="POST">
