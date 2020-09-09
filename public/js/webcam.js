@@ -22,8 +22,7 @@ let photoBlob;
 const elementList = document.querySelectorAll('[name="sticker"]');
 
 for (let i = 0; i < elementList.length; i++)
-        elementList[i].addEventListener("change", e => {
-            // noinspection JSUnresolvedVariable
+        elementList[i].addEventListener("click", e => {
             if (e.target.checked)
                 addSticker(elementList[i].id);
             else
