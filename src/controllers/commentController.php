@@ -41,17 +41,18 @@ class commentController
                 "error" => true,
                 "message" => "Couldn't add comment"));
         else {
-            if ($_SESSION['uid'] !== $$this->imageModel->getImageByIid($_POST['iid'])['uid']
-                && $this->userModel->getUserdata($_SESSION['uid'])['sendNotifications'] === 1) {
-                mail($this->userModel->getUserdata($_SESSION['uid'])['email'],
+            $picUid = $this->imageModel->getImageByIid($_POST['iid'])['uid'];
+            $notificationPreference = $this->userModel->getUserdata($picUid)['sendNotifications'];
+            if ($_SESSION['uid'] !== $picUid && $notificationPreference == 1) {
+                mail($this->userModel->getUserdata($picUid)['email'],
                     "New comment",
-                    "You just got a new comment!! Go and check it out at " .
-                    $_SERVER['SERVER_PORT'] . "/src/views/view_image?iid=" . $_POST['iid']);
+                    "You just got a new comment! Go and check it out at " . "http://" .
+                    $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/viewImage?iid=" . $_POST['iid']);
             }
             echo json_encode(array(
-                "status" => "Success",
-                "error" => false,
-                "message" => "Comment added"));
+                    "status" => "Success",
+                    "error" => false,
+                    "message" => "Comment added"));
         }
     }
 

@@ -52,19 +52,13 @@ class userController
 
     public function sendResetMail()
     {
-        if (($userdata = $this->model->getUserdata($this->model->getUid($_POST['username']))[0]) === FALSE || !isset($_POST['resetbtn'])) {
+        if (($userdata = $this->model->getUserdata($this->model->getUid($_POST['username']))) === FALSE || !isset($_POST['resetbtn'])) {
             return;
         }
-        echo $userdata['email'],
-        "Password reset",
-            "It seems you forgot your password. Reset it by clicking here " .
-            "http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/resetPassword/" . $userdata['uid'] . "/" .
-            $userdata['confirmationCode'];
-
         mail($userdata['email'],
             "Password reset",
-            "It seems you forgot your password. Reset it by clicking here " .
-            $_SERVER['SERVER_PORT'] . "/resetPassword/" . $userdata['uid'] . "/" .
+            "It seems you forgot your password. Reset it by clicking here " . "http://" .
+            $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/resetPassword/" . $userdata['uid'] . "/" .
             $userdata['confirmationCode']);
     }
 
@@ -90,7 +84,6 @@ class userController
         if (!isset($_GET['confirmationCode']) || !$this->model->verifyAccount($_GET['confirmationCode']))
             echo "Error!";
         else {
-            $this->model->verifyAccount($_GET['confirmationCode']);
             $this->redirect("/index.php?status=accountVerified");
         }
     }

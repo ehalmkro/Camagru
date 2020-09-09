@@ -112,6 +112,7 @@ function addComment() {
     }).then(response => response.text()
     ).then(
         success => {
+            console.log(success);
             alert("Comment added");
             location.reload();
         }
