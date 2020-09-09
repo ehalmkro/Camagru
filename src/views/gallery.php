@@ -60,7 +60,6 @@ $image_array = $imageController->displayImageByUser(NULL);
         <a href="/src/views/gallery.php/?page=<? echo $imageController->getPage() + 1 ?>" class="button">Next page</a>
     <? endif; ?>
 
-    <script src="/public/js/infinite.js"></script>
     <script type="text/javascript">let sessionUid = "<?php echo $_SESSION['uid']?>"</script>
     <script src="/public/js/likecomment.js"></script>
 
