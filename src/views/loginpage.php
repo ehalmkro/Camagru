@@ -1,3 +1,11 @@
+<?php if ($_GET['status'] == 'OK'): ?>
+    <script> window.opener.location.reload();
+         window.close();
+    </script>
+<? elseif ($_GET['status'] == 'failed'): ?>
+    <script>alert("Try again!")</script>
+<? endif; ?>
+
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"

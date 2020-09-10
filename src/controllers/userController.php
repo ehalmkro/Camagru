@@ -155,10 +155,10 @@ class userController
             $uid = $this->model->login($username, $password);
             if ($uid != FALSE) {
                 $_SESSION['uid'] = $uid;
-                $this->redirect('/index.php');
+                $this->redirect('/index.php/login?status=OK');
             }
             else
-                $this->redirect('/index.php?status=loginFailed');
+                $this->redirect('/index.php/login?status=failed');
         }
     }
 

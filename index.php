@@ -1,8 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['setupDone'])) {
+if (!file_exists($_SERVER['DOCUMENT_ROOT']  . '/config/configOK')) {
     header("Location: /config/setup.php");
-    $_SESSION['setupDone'] = 1;
+    touch($_SERVER['DOCUMENT_ROOT']  . '/config/configOK');
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/userController.php';
@@ -79,8 +79,5 @@ switch ($controller) {
     }
 
     default:
-        //   if (isset($_SESSION['uid']))
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/gallery.php';
-    //  else
-    //    include $_SERVER['DOCUMENT_ROOT'] . '/src/views/homepage.php';
 }
