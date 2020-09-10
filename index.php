@@ -36,7 +36,7 @@ switch ($controller) {
     case 'takePicture':
     {
         if (!isset($_SESSION['uid'])) {
-            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/loginpage.php';
+            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/gallery.php';
             break;
         }
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/webcam.php';
@@ -46,7 +46,8 @@ switch ($controller) {
     case 'viewImage':
     {
         if (!isset($_SESSION['uid'])) {
-            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/loginpage.php';
+            $_GET['login'] = "fail";
+            include $_SERVER['DOCUMENT_ROOT'] . '/src/views/gallery.php';
             break;
         }
         include $_SERVER['DOCUMENT_ROOT'] . '/src/views/view_image.php';

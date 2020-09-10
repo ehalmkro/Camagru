@@ -33,7 +33,6 @@ $image_array = $imageController->displayImageByUser(NULL);
         <? else: { ?>
             <? foreach ($image_array as $k => $innerArray): ?>
                 <div class="galleryImage col-md bg-light border p-4 m-3 rounded">
-                    <!--suppress HtmlUnknownTarget -->
                     <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>"><img
                                 alt="user image" id="userImage" class="rounded mx-auto d-block"
                                 src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/></a>
@@ -41,10 +40,12 @@ $image_array = $imageController->displayImageByUser(NULL);
                         at <? echo $innerArray['date'] ?> </p>
 
                     <div class="commentBar d-flex justify-content-between p-5">
-                        <button class="likeButton btn-sm btn-primary" id="likeButton.<? echo $innerArray['iid'] ?>"></button>
-                        <p class="likeCounter d-flex justify-content-between" id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
-                        <!--suppress HtmlUnknownTarget -->
-                        <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>" class="commentCounter d-flex justify-content-between"
+                        <button class="likeButton btn-sm btn-primary"
+                                id="likeButton.<? echo $innerArray['iid'] ?>"></button>
+                        <p class="likeCounter d-flex justify-content-between"
+                           id="likeCounter.<? echo $innerArray['iid'] ?>"> like(s)</p>
+                        <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>"
+                           class="commentCounter d-flex justify-content-between"
                            id="commentCounter.<? echo $innerArray['iid'] ?>"><? echo $commentController->getCommentCount($innerArray['iid']); ?>
                             comment(s)</a>
                     </div>
@@ -62,6 +63,9 @@ $image_array = $imageController->displayImageByUser(NULL);
 
     <script type="text/javascript">let sessionUid = "<?php echo $_SESSION['uid']?>"</script>
     <script src="/public/js/likecomment.js"></script>
+    <? if ($_GET['login'] == 'fail'): ?>
+        <script>alert("Login to see comments!")</script>
+    <? endif; ?>
 
     </BODY>
 
