@@ -22,15 +22,15 @@ let photoBlob;
 const elementList = document.querySelectorAll('[name="sticker"]');
 
 for (let i = 0; i < elementList.length; i++)
-        elementList[i].addEventListener("click", e => {
-            if (e.target.checked)
-                addSticker(elementList[i].id);
-            else
-                removeSticker(elementList[i].id);
-        }, false);
-    selectFileButton.addEventListener("click", selectFile, false);
-    uploadButton.addEventListener("click", uploadImage, false);
-    cancelButton.addEventListener("click", cancelImage, false);
+    elementList[i].addEventListener("click", e => {
+        if (e.target.checked)
+            addSticker(elementList[i].id);
+        else
+            removeSticker(elementList[i].id);
+    }, false);
+selectFileButton.addEventListener("click", selectFile, false);
+uploadButton.addEventListener("click", uploadImage, false);
+cancelButton.addEventListener("click", cancelImage, false);
 
 function drawImage() {
     ctx.clearRect(0, 0, 0, 0);
@@ -101,32 +101,33 @@ function selectFile() {
             console.log(selectedFile.type);
             alert("Invalid file!");
         } else {
-          const reader = new FileReader();
-          reader.onload = (ev) => {
-              previewPic = new Image();
-              previewPic.onload = () => {
-                drawImage();
-              };
-              // noinspection JSValidateTypes
-              previewPic.src = ev.target.result;
-          };
-          photoBlob = selectedFile;
-          reader.readAsDataURL(selectedFile);
-          showElements(canvas, uploadButton);
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                previewPic = new Image();
+                previewPic.onload = () => {
+                    drawImage();
+                };
+                previewPic.src = ev.target.result;
+            };
+            photoBlob = selectedFile;
+            reader.readAsDataURL(selectedFile);
+            showElements(canvas, uploadButton);
         }
     });
 }
 
 function uploadImage() {
     let reader = new FileReader();
-    reader.readAsDataURL(photoBlob);
     reader.onload = function () {
         let base64String = reader.result.split(',')[1];
-        // console.log(base64String);
         upload(base64String);
     };
-    window.opener.location.reload();
-    window.close();
+    if ((typeof(photoBlob) === 'object'))
+        reader.readAsDataURL(photoBlob);
+    else
+        upload(photoBlob.split(',')[1]);
+   // window.parent.location.reload();
+   // window.close();
 }
 
 function cancelImage() {
@@ -134,37 +135,31 @@ function cancelImage() {
 }
 
 
-function takePicture(mediaStreamTrack, imageCapture) {
-    // noinspection JSUnresolvedFunction
-    imageCapture.takePhoto()
-        .then(blob => {
-            hideElements(video, captureButton, selectFileButton);
-            showElements(uploadButton, canvas);
-            photoBlob = blob;
-            previewPic = new Image();
-            previewPic.src = URL.createObjectURL(blob);
-            // noinspection JSCheckFunctionSignatures
-            ctx.drawImage(video, 0, 0);
-            drawImage();
-            showElements(retakeButton);
-            retakeButton.addEventListener('click', function (ev) {
-                ev.preventDefault();
-                hideElements(uploadButton, retakeButton, canvas);
-                showElements(video, captureButton, selectFileButton);
-            }, false);
-        })
-        .catch(error => console.error('takePhoto() error:', error));
+function takePicture() {
+    hideElements(video, captureButton, selectFileButton);
+    showElements(uploadButton, canvas);
+    ctx.drawImage(video, 0, 0);
+    previewPic = new Image();
+    previewPic.onload = () => {
+        drawImage();
+    };
+    previewPic.src = canvas.toDataURL();
+    photoBlob = previewPic.src;
+    showElements(retakeButton);
+    retakeButton.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        hideElements(uploadButton, retakeButton, canvas);
+        showElements(video, captureButton, selectFileButton);
+    }, false);
 }
 
 function gotMedia(mediaStream) {
     video.srcObject = mediaStream;
     video.play();
     const mediaStreamTrack = mediaStream.getVideoTracks()[0];
-    // noinspection JSUnresolvedFunction
-    const imageCapture = new ImageCapture(mediaStreamTrack);
     captureButton.addEventListener('click', function (ev) {
         ev.preventDefault();
-        takePicture(mediaStreamTrack, imageCapture);
+        takePicture();
     }, false);
 }
 
