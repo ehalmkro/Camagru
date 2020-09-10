@@ -78,8 +78,8 @@ const upload = (file) => {
     })
 
         // PLAINTEXT CONSOLE LOG FOR DEBUGGING
-        .then(res => res.text())          // convert to plain text
-        .then(text => console.log(text))  // then log it out
+       // .then(res => res.text())          // convert to plain text
+       // .then(text => console.log(text))  // then log it out
 
     /*        .then(response => response.json()
             ).then(
@@ -98,7 +98,6 @@ function selectFile() {
         const selectedFile = document.getElementById("fileInput").files[0];
         if (selectedFile === undefined || selectedFile.size > 5120000 ||
             (selectedFile.type !== 'image/png' && selectedFile.type !== 'image/jpeg')) {
-            console.log(selectedFile.type);
             alert("Invalid file!");
         } else {
             const reader = new FileReader();
@@ -126,8 +125,8 @@ function uploadImage() {
         reader.readAsDataURL(photoBlob);
     else
         upload(photoBlob.split(',')[1]);
-   // window.parent.location.reload();
-   // window.close();
+    window.opener.location.reload(false);
+    window.close();
 }
 
 function cancelImage() {
