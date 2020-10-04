@@ -1,4 +1,4 @@
-<?php /** @noinspection Annotator */
+<?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/Core.class.php';
 
 class userModel
@@ -7,13 +7,8 @@ class userModel
 
     public function __construct()
     {
-        // session_start();
         $core = Core::getInstance();
         $this->pdo = $core->pdo;
-        //    $this->tableName = "users";
-        //    $this->fieldList = array('uid', 'username', 'password', 'email');
-        //    $this->fieldList['uid'] = array('pkey' => 'y');
-        //    $this->pkey = 'uid';
     }
 
     public function signUp($username, $password, $email)
@@ -36,8 +31,8 @@ class userModel
         $confirmationCode = bin2hex(random_bytes(32));
         $password = password_hash($password, PASSWORD_DEFAULT);
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO 
-									users (username, password, email, confirmationCode) 
+            $stmt = $this->pdo->prepare("INSERT INTO
+									users (username, password, email, confirmationCode)
 									VALUES (:username, :password, :email, :confirmationCode);");
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $password);

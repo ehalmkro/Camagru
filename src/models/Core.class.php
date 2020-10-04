@@ -1,9 +1,7 @@
 <?php
 
 require_once $_SERVER['DOCUMENT_ROOT'] . "/config/database.php";
-//require_once "/Users/ehalmkro/hive/Camagru/config/database.php";
 Config::write('db.dsn', $DB_DSN );
-//. ";dbname=camagru_db"
 Config::write('db.user', $DB_USER);
 Config::write('db.password', $DB_PASSWORD);
 

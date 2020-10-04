@@ -1,8 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/models/Core.class.php';
 
-//require_once '/Users/ehalmkro/hive/Camagru/src/models/Core.class.php';
-
 class commentModel
 {
     private $pdo;
@@ -17,8 +15,8 @@ class commentModel
     public function addComment($iid, $uid, $username, $comment)
     {
         try {
-            $stmt = $this->pdo->prepare('INSERT INTO 
-                                comments (iid, uid, username, text, islike) 
+            $stmt = $this->pdo->prepare('INSERT INTO
+                                comments (iid, uid, username, text, islike)
                                 VALUES (?, ?, ?, ?, FALSE)');
             $stmt->execute([$iid, $uid, $username, $comment]);
         } catch (PDOException $e) {
@@ -31,7 +29,7 @@ class commentModel
     public function removeComment($cid, $uid)
     {
         try {
-            $stmt = $this->pdo->prepare('DELETE FROM 
+            $stmt = $this->pdo->prepare('DELETE FROM
                                 comments WHERE cid=? AND uid=? AND islike=FALSE');
             $stmt->execute([$cid, $uid]);
         } catch (PDOException $e) {
@@ -84,8 +82,8 @@ class commentModel
                 echo "Already liked yo";
                 return FALSE;
             }
-            $stmt = $this->pdo->prepare('INSERT INTO 
-                                comments (iid, uid, username, text, islike) 
+            $stmt = $this->pdo->prepare('INSERT INTO
+                                comments (iid, uid, username, text, islike)
                                 VALUES (?, ?, ?, NULL, TRUE)');
             $stmt->execute([$iid, $uid, $username]);
         } catch (PDOException $e) {
@@ -113,7 +111,7 @@ class commentModel
     public function removeLike($iid, $uid)
     {
         try {
-            $stmt = $this->pdo->prepare('DELETE FROM 
+            $stmt = $this->pdo->prepare('DELETE FROM
                                 comments WHERE iid=? AND uid=? AND islike=TRUE');
             $stmt->execute([$iid, $uid]);
         } catch (PDOException $e) {

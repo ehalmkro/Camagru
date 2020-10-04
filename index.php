@@ -1,9 +1,5 @@
 <?php
 session_start();
-if (!file_exists($_SERVER['DOCUMENT_ROOT']  . '/config/configOK')) {
-    header("Location: /config/setup.php");
-    touch($_SERVER['DOCUMENT_ROOT']  . '/config/configOK');
-}
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/userController.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/src/controllers/imageController.php';
