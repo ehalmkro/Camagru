@@ -22,7 +22,7 @@
     <div>
         <? if (isset($_SESSION['uid'])): { ?>
 
-            <button class="btn-primary" onclick="pop_up('/index.php/takePicture', 900, 720)">Take picture w/ webcam
+            <button class="btn-primary" onclick="pop_up('/index.php/takePicture', 900, 720)">Add a picture
             </button>
             <button class="btn-primary" onclick="pop_up('/index.php/userSettings', 640, 510)">User settings</button>
             <form action="/userController/logout" class="text-right" method="POST">
