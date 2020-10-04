@@ -31,7 +31,7 @@ $imageArray = $imageController->displayImageByIid($iid);
         <p>Nothing here!</p>
     <? else: ?>
     <a href="/src/views/gallery.php?page=<? echo $fromPage ?>">
-        <img id="viewImage" alt="Picture" class="rounded mx-auto d-block"
+        <img id="viewImage" alt="Picture" class="rounded mx-auto d-block col-sm"
              src='/public/img/uploads/<? echo $imageArray['imageHash'] . '.jpg' ?>'
              title="<? echo $userController->returnUserName($imageArray['uid']) ?> at <? echo $imageArray['date'] ?> "/>
         </a>

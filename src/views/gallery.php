@@ -34,7 +34,7 @@ $image_array = $imageController->displayImageByUser(NULL);
             <? foreach ($image_array as $k => $innerArray): ?>
                 <div class="galleryImage col-md bg-light border p-4 m-3 rounded">
                     <a href="/index.php/viewImage?iid=<? echo $innerArray['iid'] ?>&fromPage=<? echo $page ?>"><img
-                                alt="user image" id="userImage" class="rounded mx-auto d-block"
+                                alt="user image" id="userImage" class="rounded mx-auto d-block col-sm"
                                 src='/public/img/uploads/<? echo $innerArray['imageHash'] . '.jpg' ?>'/></a>
                     <p class="text-center"> by user <? echo $userController->returnUserName($innerArray['uid']) ?>
                         at <? echo $innerArray['date'] ?> </p>
