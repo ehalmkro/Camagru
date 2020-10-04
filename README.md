@@ -26,3 +26,10 @@ Javascript's fetch API. If enabled, users get email notifications on new comment
 User creation requires a complex enough password and an email confirmation. Users can later reset their password via email. 
 
 Database interactions are handled with [PDO](https://www.php.net/manual/en/book.pdo.php) using a _singleton_ class limiting the concurrent database connections to only one instance. The image model has pagination implemented. The MySQL database has three tables, users, images and likes/comments.
+
+How would I improve this (TO DO):
+
+- Make it prettier!
+- Simplify UX (get rid of pop up windows to make it one page)
+- Unify controller error handling behaviour
+- Make stickers draggable
