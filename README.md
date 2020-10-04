@@ -1,6 +1,7 @@
 # Camagru
 
-The first web branch project at Hive Helsinki, a simple Instagram-like web app made using _good old_ PHP, vanilla JS, MySQL and non-JS Bootstrap.
+The first web branch project at Hive Helsinki, a simple Instagram-like web app made using _good old_ PHP, vanilla JS, MySQL and non-JS Bootstrap with no external (JS or PHP) frameworks allowed.
+
 My main focus on this project was learning the model-view-controller design pattern, which I feel I implemented into the project well. 
 Design and UX/UI wise I kept the project deliberately simple, resorting to Bootstrap's default layouts and themes.
 
@@ -24,5 +25,4 @@ Javascript's fetch API. If enabled, users get email notifications on new comment
 
 User creation requires a complex enough password and an email confirmation. Users can later reset their password via email. 
 
-Database interactions are handled with [PDO](https://www.php.net/manual/en/book.pdo.php) using a _singleton_ class limiting the concurrent database connections to only one instance.
-The MySQL database has three tables, users, images and likes/comments.
+Database interactions are handled with [PDO](https://www.php.net/manual/en/book.pdo.php) using a _singleton_ class limiting the concurrent database connections to only one instance. The image model has pagination implemented. The MySQL database has three tables, users, images and likes/comments.
